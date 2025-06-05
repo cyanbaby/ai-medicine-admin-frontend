@@ -43,37 +43,54 @@
         </div>
 
         <el-button class="thirdparty-button" type="primary" @click="showDialog = true">
-          Or connect with
+          注册
         </el-button>
       </div>
     </el-form>
 
-    <el-dialog title="Or connect with" v-model="showDialog">
-      Can not be simulated on local, so please combine you own business simulation! ! !
-      <br>
-      <br>
-      <br>
-      <social-sign />
+
+    <el-dialog title="注册" v-model="showDialog" @close="resetForm">
+      <el-form :model="registerForm" :rules="registerRules" ref="registerForm" calss="register-form" label-position="left">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="registerForm.username" placeholder="请输入用户名" />
+        </el-form-item>
+
+        <el-form-item label="电子邮箱" prop="email">
+          <el-input v-model="registerForm.email" placeholder="请输入电子邮箱" />
+        </el-form-item>
+
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="registerForm.password" type="password" placeholder="请输入密码" show-password />
+        </el-form-item>
+
+        <el-form-item label="确认密码" prop="password_confirm">
+          <el-input v-model="registerForm.password_confirm" type="password" placeholder="请确认密码" show-password />
+        </el-form-item>
+
+        <div slot="footer" class="dialog-footer text-right">
+          <el-button @click="showDialog = false">取消</el-button>
+          <el-button type="primary" @click="handleRegister">提交</el-button>
+        </div>
+      </el-form>
     </el-dialog>
+
   </div>
 </template>
 
 <script lang="ts">
 import { validUsername } from '@/utils/validate';
 import { defineComponent } from 'vue';
-import SocialSign from './components/SocialSignin.vue';
 import type { FormItemRule } from 'element-plus';
 import type { IForm } from '@/types/element-plus';
 import store from '@/store';
 
 interface QueryType {
   // 自定义key 任意字符串
-  [propname:string]:string
+  [propname: string]: string
 }
 
 export default defineComponent({
   name: 'Login',
-  components: { SocialSign },
   data() {
     const validateUsername: FormItemRule['validator'] = (_rule, value, callback) => {
       if (!validUsername(value)) {
@@ -103,12 +120,35 @@ export default defineComponent({
       loading: false,
       showDialog: false,
       redirect: undefined,
-      otherQuery: {}
+      otherQuery: {},
+      registerForm: {
+        username: '',
+        email: '',
+        password: '',
+        password_confirm: ''
+      },
+      registerRules: {
+        username: [
+          { required: true, message: '用户名不能为空', trigger: 'blur' }
+        ],
+        email: [
+          { required: true, message: '电子邮箱不能为空', trigger: 'blur' },
+          { type: 'email', message: '请输入有效的邮箱地址', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '密码不能为空', trigger: 'blur' },
+          { min: 6, message: '密码不能少于6个字符', trigger: 'blur' }
+        ],
+        password_confirm: [
+          { required: true, message: '确认密码不能为空', trigger: 'blur' },
+          { validator: this.validatePasswordConfirm, trigger: 'blur' }
+        ],
+      }
     };
   },
   watch: {
     $route: {
-      handler: function(route) {
+      handler: function (route) {
         const query = route.query;
         if (query) {
           this.redirect = query.redirect;
@@ -168,8 +208,8 @@ export default defineComponent({
         });
       });
     },
-    getOtherQuery(query:QueryType) {
-      return Object.keys(query).reduce((acc:QueryType, cur) => {
+    getOtherQuery(query: QueryType) {
+      return Object.keys(query).reduce((acc: QueryType, cur) => {
         if (cur !== 'redirect') {
           acc[cur] = query[cur];
         }
@@ -207,13 +247,14 @@ $light_gray: #fff;
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-  .login-container .el-input input {
+  .login-form .el-input input {
     color: $cursor;
   }
 }
 
 /* reset element-plus css */
-.login-container {
+.login-form {
+
   .el-input {
     height: 47px;
     width: 85%;
@@ -235,7 +276,7 @@ $cursor: #fff;
 
       &:-webkit-autofill {
         box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor  !important;
+        -webkit-text-fill-color: $cursor !important;
       }
     }
   }
