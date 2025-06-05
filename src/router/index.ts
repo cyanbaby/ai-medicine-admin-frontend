@@ -60,10 +60,56 @@ export const constantRoutes:RouteRecordRaw[] = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index.vue'),
         name: 'Dashboard',
-        meta: { title: '首页', icon: 'dashboard', affix: true }
+        meta: { title: '首页', icon: 'component', affix: true }
+      },
+    ]
+  },
+  // #region 用户管理
+  {
+    path: '/user-profile',
+    component: Layout,
+    redirect: '/user-profile/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/user-profile/index.vue'),
+        name: 'UserProfile',
+        meta: { title: '用户资料管理', icon: 'component', affix: true }
       }
     ]
   },
+  {
+    path: '/points-management',
+    component: Layout,
+    redirect: '/points-management/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/points-management/index.vue'),
+        name: 'PointsManagement',
+        meta: { title: '积分管理', icon: 'component', affix: true }
+      }
+    ]
+  },
+
+  {
+    path: '/system-config',
+    component: Layout,
+    redirect: '/system-config/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/system-config/index.vue'),
+        name: 'SystemConfig',
+        meta: { title: '系统配置管理', icon: 'component', affix: true }
+      }
+    ]
+  },
+
+  // #endregion
+
+
+  
 
   {
     path: '/profile',
