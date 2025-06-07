@@ -75,6 +75,7 @@ import type { IForm } from '@/types/element-plus';
 import store from '@/store';
 import { register, login } from '@/api/user';
 import { ElMessage } from 'element-plus';
+import { getUserProfileList } from '@/api/profile';
 
 interface QueryType {
   // 自定义key 任意字符串
@@ -244,7 +245,7 @@ export default defineComponent({
             .then((res) => {
               const data = res.data;
               this.saveUserInfo(data)
-              
+
               // this.$router.push({ path: this.redirect || '/', query: this.otherQuery });
               this.$router.push({ path: '/dashboard' });
               this.loading = false;
@@ -258,6 +259,15 @@ export default defineComponent({
           console.log('error submit!!');
         }
       });
+
+      // getUserProfileList({
+      //       page: 1,
+      //       pageSize: 10
+      //   }).then(res => {
+      //       console.log(res);
+      //   });
+
+
     },
     getOtherQuery(query: QueryType) {
       return Object.keys(query).reduce((acc: QueryType, cur) => {
@@ -272,10 +282,10 @@ export default defineComponent({
       localStorage.setItem('access_token', data.tokens.access);
       localStorage.setItem('user', JSON.stringify(data.user));
       // store.user().token = data.tokens.access;
-      if(data.user.is_superuser) {
-          store.user().roles = ['admin'];
-        } else {
-          store.user().roles = ['editor'];
+      if (data.user.is_superuser) {
+        store.user().roles = ['admin'];
+      } else {
+        store.user().roles = ['editor'];
       }
     }
   }

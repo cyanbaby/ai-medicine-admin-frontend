@@ -86,16 +86,24 @@ export default defineConfig(({ command, mode }) => {
     server: {
       host: 'localhost',
       port: 8001,
-      proxy: {
-        '/api-test': {
-          target: 'http://118.31.221.73:8001',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api-test/, ''),
-          headers: {
-            Cookie: env.VUE_APP_COOKIE
-          }
-        }
-      }
+      // proxy: {
+      //   '/api-test': {
+      //     target: 'http://118.31.221.73:8001',
+      //     changeOrigin: true,
+      //     rewrite: (path) => path.replace(/^\/api-test/, ''),
+      //     headers: {
+      //       Cookie: env.VUE_APP_COOKIE
+      //     }
+      //   },
+      //   '/user-profile/api-test': {
+      //     target: 'http://118.31.221.73:8001/',
+      //     changeOrigin: true,
+      //     rewrite: (path) => path.replace(/^\/user-profile\/api-test/, ''),
+      //     headers: {
+      //       Cookie: env.VUE_APP_COOKIE
+      //     }
+      //   }
+      // }
     }
   };
 });

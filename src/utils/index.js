@@ -1,3 +1,13 @@
+import moment from 'moment';
+
+// 2025-06-02T01:41:04.131072Z
+// 使用moment 格式化时间的方法
+
+export function formatDateTime(time, cFormat = 'YYYY-MM-DD HH:mm:ss') {
+  return moment(time).format(cFormat);
+}
+
+
 /**
  * Created by PanJiaChen on 16/11/18.
  */
@@ -50,6 +60,8 @@ export function parseTime(time, cFormat) {
   });
   return time_str;
 }
+
+
 
 /**
  * @param {number} time

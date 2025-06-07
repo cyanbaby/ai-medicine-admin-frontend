@@ -12,13 +12,19 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
+
+    console.group('config');
+    console.log(config.url);
+    console.log(config);
+    console.groupEnd();
+
     // do something before request is sent
     const token = localStorage.getItem('access_token');
     if (token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['Authorization'] = token;
+      config.headers['Authorization'] = 'Bearer '+token;
     }
     return config;
   },
@@ -42,6 +48,9 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
+    console.group('response');
+    console.log(response);
+    console.groupEnd();
     const res = response.data;
     // console.group('res');
     // console.log(res);
