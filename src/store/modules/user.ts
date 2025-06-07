@@ -22,7 +22,7 @@ export default defineStore({
     name: '',
     avatar: '',
     introduction: '',
-    roles: []
+    roles: ['admin', 'editor']
   }),
   getters: {},
   actions: {
@@ -43,6 +43,8 @@ export default defineStore({
 
     // get user info
     getInfo() {
+
+      
       return new Promise((resolve, reject) => {
         apiGetInfo(this.token).then(response => {
           const { data } = response;
@@ -98,6 +100,7 @@ export default defineStore({
 
     // dynamically modify permissions
     async changeRoles(role) {
+      // alert(1)
       const token = role + '-token';
 
       this.token = token;

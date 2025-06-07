@@ -30,27 +30,17 @@
       </el-tooltip>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.prevent="handleLogin">
-        Login</el-button>
+        登录</el-button>
 
-      <div style="position:relative">
-        <div class="tips">
-          <span>Username : admin</span>
-          <span>Password : any</span>
-        </div>
-        <div class="tips">
-          <span style="margin-right:18px;">Username : editor</span>
-          <span>Password : any</span>
-        </div>
-
-        <el-button class="thirdparty-button" type="primary" @click="showDialog = true">
-          注册
-        </el-button>
-      </div>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" class="!ml-0"
+        @click="showDialog = true">
+        注册</el-button>
     </el-form>
 
 
     <el-dialog title="注册" v-model="showDialog" @close="resetForm">
-      <el-form :model="registerForm" :rules="registerRules" ref="registerForm" calss="register-form" label-position="left">
+      <el-form :model="registerForm" :rules="registerRules" ref="registerForm" calss="register-form" label-width="80px"
+        label-position="left">
         <el-form-item label="用户名" prop="username">
           <el-input v-model="registerForm.username" placeholder="请输入用户名" />
         </el-form-item>
@@ -69,7 +59,7 @@
 
         <div slot="footer" class="dialog-footer text-right">
           <el-button @click="showDialog = false">取消</el-button>
-          <el-button type="primary" @click="handleRegister">提交</el-button>
+          <el-button type="primary" @click="handleRegister" :loading="loading">提交</el-button>
         </div>
       </el-form>
     </el-dialog>
@@ -78,39 +68,66 @@
 </template>
 
 <script lang="ts">
-import { validUsername } from '@/utils/validate';
+// import { validUsername } from '@/utils/validate';
 import { defineComponent } from 'vue';
 import type { FormItemRule } from 'element-plus';
 import type { IForm } from '@/types/element-plus';
-import store from '@/store';
+// import store from '@/store';
+import { register, login } from '@/api/user';
+import { ElMessage } from 'element-plus';
 
 interface QueryType {
   // 自定义key 任意字符串
   [propname: string]: string
 }
 
+interface LoginForm {
+  username: string;
+  password: string;
+}
+
+interface RegisterForm {
+  username: string;
+  email: string;
+  password: string;
+  password_confirm: string;
+}
+
+
 export default defineComponent({
   name: 'Login',
   data() {
     const validateUsername: FormItemRule['validator'] = (_rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'));
+      if (!value) {
+        callback(new Error('请输入用户名'));
       } else {
         callback();
       }
     };
     const validatePassword: FormItemRule['validator'] = (_rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'));
+        callback(new Error('密码不能少于6个字符'));
       } else {
         callback();
       }
     };
+    // 方法: 验证确认密码是否与密码一致
+    const validatePasswordConfirm = (rule, value, callback) => {
+      console.log(this.registerForm);
+      if (value === '') {
+        callback(new Error('确认密码不能为空'));
+      } else if (value !== (this as any).registerForm.password) {
+        callback(new Error('确认密码与密码不一致'));
+      } else {
+        callback();
+      }
+    }
+
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
-      },
+        username: '',
+        password: ''
+      } as LoginForm,
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
@@ -126,7 +143,7 @@ export default defineComponent({
         email: '',
         password: '',
         password_confirm: ''
-      },
+      } as RegisterForm,
       registerRules: {
         username: [
           { required: true, message: '用户名不能为空', trigger: 'blur' }
@@ -141,7 +158,7 @@ export default defineComponent({
         ],
         password_confirm: [
           { required: true, message: '确认密码不能为空', trigger: 'blur' },
-          { validator: this.validatePasswordConfirm, trigger: 'blur' }
+          { validator: validatePasswordConfirm, trigger: 'blur' }
         ],
       }
     };
@@ -172,6 +189,41 @@ export default defineComponent({
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
+    resetForm() {
+      this.registerForm = {
+        username: '',
+        email: '',
+        password: '',
+        password_confirm: ''
+      };
+    },
+    // 注册
+    handleRegister() {
+      (this.$refs.registerForm as IForm).validate(valid => {
+        if (valid) {
+          this.loading = true;
+          register(this.registerForm).then(res => {
+
+            const data = res.data;
+            // 保存token和用户信息
+            localStorage.setItem('access_token', data.tokens.access);
+            localStorage.setItem('user', JSON.stringify(data.user));
+
+            // 登录
+            this.loginForm.username = data.user.username;
+            this.loginForm.password = this.registerForm.password;
+
+            this.showDialog = false;
+            ElMessage.success('注册成功');
+          }).catch(err => {
+            console.log(err);
+          })
+            .finally(() => {
+              this.loading = false;
+            });
+        }
+      });
+    },
     checkCapslock(e) {
       const { key } = e;
       this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z');
@@ -188,24 +240,27 @@ export default defineComponent({
     },
     handleLogin() {
       (this.$refs.loginForm as IForm).validate(valid => {
-        return new Promise((resolve, reject) => {
-          if (valid) {
-            this.loading = true;
-            store.user().login(this.loginForm)
-              .then(() => {
-                this.$router.push({ path: this.redirect || '/', query: this.otherQuery });
-                this.loading = false;
-              })
-              .catch(() => {
-                this.loading = false;
-              }).finally(() => {
-                resolve();
-              });
-          } else {
-            console.log('error submit!!');
-            reject();
-          }
-        });
+        if (valid) {
+          this.loading = true;
+          login(this.loginForm)
+            .then((res) => {
+              const data = res.data;
+              // 保存token和用户信息
+              localStorage.setItem('access_token', data.tokens.access);
+              localStorage.setItem('user', JSON.stringify(data.user));
+              
+              // this.$router.push({ path: this.redirect || '/', query: this.otherQuery });
+              this.$router.push({ path: '/dashboard' });
+              this.loading = false;
+            })
+            .catch((err) => {
+              console.log(err);
+            }).finally(() => {
+              this.loading = false;
+            });
+        } else {
+          console.log('error submit!!');
+        }
       });
     },
     getOtherQuery(query: QueryType) {
@@ -216,24 +271,6 @@ export default defineComponent({
         return acc;
       }, {});
     }
-    // afterQRScan() {
-    //   if (e.key === 'x-admin-oauth-code') {
-    //     const code = getQueryObject(e.newValue)
-    //     const codeMap = {
-    //       wechat: 'code',
-    //       tencent: 'code'
-    //     }
-    //     const type = codeMap[this.auth_type]
-    //     const codeName = code[type]
-    //     if (codeName) {
-    //       store.user().LoginByThirdparty(codeName).then(() => {
-    //         this.$router.push({ path: this.redirect || '/' })
-    //       })
-    //     } else {
-    //       alert('第三方登录失败')
-    //     }
-    //   }
-    // }
   }
 });
 </script>

@@ -7,15 +7,15 @@ import { Help as IconHelp } from '@element-plus/icons-vue';
 const Layout = ():RouteComponent => import('@/layout/index.vue');
 
 /* Router Modules */
-import componentsRouter from './modules/components';
-import chartsRouter from './modules/charts';
-import nestedRouter from './modules/nested';
+// import componentsRouter from './modules/components';
+// import chartsRouter from './modules/charts';
+// import nestedRouter from './modules/nested';
 // import tableRouter from './modules/table';
 
 /**
- * constantRoutes
- * a base page that does not have permission requirements
- * all roles can be accessed
+ * constantRoutes/常规路由
+ * 没有权限要求的基页
+ * 所有角色都可以访问
  *
  * 注意：hidden、alwaysShow 属性配置移动到了meta中！！！
  */
@@ -91,7 +91,6 @@ export const constantRoutes:RouteRecordRaw[] = [
       }
     ]
   },
-
   {
     path: '/system-config',
     component: Layout,
@@ -105,7 +104,6 @@ export const constantRoutes:RouteRecordRaw[] = [
       }
     ]
   },
-
   // #endregion
 
 
@@ -128,8 +126,8 @@ export const constantRoutes:RouteRecordRaw[] = [
 ];
 
 /**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
+ * asyncRoutes/动态路由
+ * 需要根据用户角色动态加载的路由
  *
  * 注意：hidden、alwaysShow 属性配置移动到了meta中！！！
  */

@@ -6,6 +6,7 @@ import store from '@/store';
  * @example see @/views/permission/directive.vue
  */
 export default function checkPermission(value) {
+  // alert(1)
   if (value && value instanceof Array && value.length > 0) {
     const roles = store.user && store.user().roles;
     const permissionRoles = value;
