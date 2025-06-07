@@ -43,9 +43,9 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data;
-    console.group('res');
-    console.log(res);
-    console.groupEnd();
+    // console.group('res');
+    // console.log(res);
+    // console.groupEnd();
 
     // if the custom code is not 20000, it is judged as an error.
     if (res.status !== 200 && res.status !== 201) {
