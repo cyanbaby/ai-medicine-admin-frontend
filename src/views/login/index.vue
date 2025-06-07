@@ -72,7 +72,7 @@
 import { defineComponent } from 'vue';
 import type { FormItemRule } from 'element-plus';
 import type { IForm } from '@/types/element-plus';
-// import store from '@/store';
+import store from '@/store';
 import { register, login } from '@/api/user';
 import { ElMessage } from 'element-plus';
 
@@ -205,9 +205,7 @@ export default defineComponent({
           register(this.registerForm).then(res => {
 
             const data = res.data;
-            // 保存token和用户信息
-            localStorage.setItem('access_token', data.tokens.access);
-            localStorage.setItem('user', JSON.stringify(data.user));
+            this.saveUserInfo(data)
 
             // 登录
             this.loginForm.username = data.user.username;
@@ -245,9 +243,7 @@ export default defineComponent({
           login(this.loginForm)
             .then((res) => {
               const data = res.data;
-              // 保存token和用户信息
-              localStorage.setItem('access_token', data.tokens.access);
-              localStorage.setItem('user', JSON.stringify(data.user));
+              this.saveUserInfo(data)
               
               // this.$router.push({ path: this.redirect || '/', query: this.otherQuery });
               this.$router.push({ path: '/dashboard' });
@@ -270,6 +266,17 @@ export default defineComponent({
         }
         return acc;
       }, {});
+    },
+    saveUserInfo(data) {
+      // 保存token和用户信息
+      localStorage.setItem('access_token', data.tokens.access);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      // store.user().token = data.tokens.access;
+      if(data.user.is_superuser) {
+          store.user().roles = ['admin'];
+        } else {
+          store.user().roles = ['editor'];
+      }
     }
   }
 });

@@ -14,15 +14,18 @@ export interface IUserState {
   roles: string[];
 }
 
+const roles = ['admin', 'editor']
+
 export default defineStore({
   id: 'user',
   state: ():IUserState => ({
     token: getToken(),
     userId: '',
     name: '',
-    avatar: '',
+    avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80',
     introduction: '',
-    roles: ['admin', 'editor']
+    // roles: ['admin', 'editor']
+    roles: []
   }),
   getters: {},
   actions: {
@@ -45,30 +48,39 @@ export default defineStore({
     getInfo() {
 
       
-      return new Promise((resolve, reject) => {
-        apiGetInfo(this.token).then(response => {
-          const { data } = response;
+      // return new Promise((resolve, reject) => {
+      //   apiGetInfo(this.token).then(response => {
+      //     const { data } = response;
 
-          if (!data) {
-            reject('Verification failed, please Login again.');
-          }
+      //     if (!data) {
+      //       reject('Verification failed, please Login again.');
+      //     }
 
-          const { roles, name, avatar, introduction } = data;
+      //     const { roles, name, avatar, introduction } = data;
 
-          // roles must be a non-empty array
-          if (!roles || roles.length <= 0) {
-            reject('getInfo: roles must be a non-null array!');
-          }
+      //     // roles must be a non-empty array
+      //     if (!roles || roles.length <= 0) {
+      //       reject('getInfo: roles must be a non-null array!');
+      //     }
 
-          this.roles = roles;
-          this.name = name;
-          this.avatar = avatar;
-          this.introduction = introduction;
-          resolve(data);
-        }).catch(error => {
-          reject(error);
-        });
-      });
+      //     this.roles = roles;
+      //     this.name = name;
+      //     this.avatar = avatar;
+      //     this.introduction = introduction;
+      //     resolve(data);
+      //   }).catch(error => {
+      //     reject(error);
+      //   });
+      // });
+      this.roles = roles;
+      return Promise.resolve({
+        roles: roles,
+        name: 'admin cyan'
+      })
+    },
+
+    setRoles(roles) {
+      this.roles = roles;
     },
 
     // user logout

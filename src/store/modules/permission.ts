@@ -55,7 +55,6 @@ export default defineStore({
       this.routes = constantRoutes.concat(routes);
     },
     generateRoutes(roles: string[]) {
-      // alert(1)
       let accessedRoutes;
       if (roles.includes('admin')) {
         // console.log('asyncRoutes',asyncRoutes)

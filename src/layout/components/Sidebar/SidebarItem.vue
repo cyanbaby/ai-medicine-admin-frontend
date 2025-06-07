@@ -142,7 +142,8 @@ export default defineComponent({
 
 .left-menu-item,
 .left-sub-menu :deep(.el-sub-menu__title) {
-  display: block;
+  // display: block;
+  display: flex;
 }
 
 .el-svg-icon {
