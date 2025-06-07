@@ -5,6 +5,9 @@ import router from './router';
 import { setupStore } from './store';
 
 import '@/styles/index.scss';
+// tailwindcss
+import "./styles/tailwind.css";
+
 import SvgIcon from './icons'; // icon
 import './permission'; // permission control
 import vPermission from './directive/permission/index'; // permission control
