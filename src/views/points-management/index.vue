@@ -6,6 +6,7 @@
 </template>
 
 <script setup>
+import { getPointsList, createPoint, getPointDetail, updatePoint, deletePoint } from '@/api/points';
 
 </script>
 
