@@ -238,8 +238,8 @@ export default defineComponent({
     getList() {
 
       getUserProfileList({
-        page: 1,
-        pageSize: 10
+        page: this.listQuery.page,
+        pageSize: this.listQuery.limit
       }).then(res => {
         const data = res.data;
         this.list = data.results;

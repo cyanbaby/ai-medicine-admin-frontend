@@ -156,7 +156,7 @@ export default defineComponent({
   },
   methods: {
     getList() {
-      getPointsList({ page: 1, pageSize: 10 }).then(res => {
+      getPointsList({ page: this.listQuery.page, pageSize: this.listQuery.limit }).then(res => {
         const data = res.data;
         this.list = data.results;
         this.total = data.count;
