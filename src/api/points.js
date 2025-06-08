@@ -3,6 +3,7 @@ import request from '@/utils/request';
 
 // 获取所有积分记录（分页列表）
 export function getPointsList(params) {
+
   return request({
     url: '/api/v1/points/',
     method: 'get',

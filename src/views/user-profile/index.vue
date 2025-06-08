@@ -95,11 +95,12 @@
       </el-table-column>
 
       <!-- Actions Column -->
-      <el-table-column align="center" fixed="right" label="操作">
+      <el-table-column align="center" fixed="right" label="操作" width="150px">
         <template v-slot="scope">
           <el-button type="text" size="small" @click="handleDetail(scope.row)">
             详情
           </el-button>
+          <el-button type="text" size="small" @click="handleEdit(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -143,16 +144,49 @@
     </el-dialog>
 
 
+    <!-- 编辑弹窗 -->
+    <el-dialog title="编辑用户信息" v-model="editDialogVisible" width="600px">
+      <el-form :model="editForm" label-width="120px">
+        <el-form-item label="邮箱"><el-input v-model="editForm.email" /></el-form-item>
+        <el-form-item label="名"><el-input v-model="editForm.first_name" /></el-form-item>
+        <el-form-item label="姓"><el-input v-model="editForm.last_name" /></el-form-item>
+        <el-form-item label="邮箱已验证">
+          <el-switch v-model="editForm.is_email_verified" />
+        </el-form-item>
+        <el-form-item label="简介"><el-input v-model="editForm.bio" type="textarea" /></el-form-item>
+        <el-form-item label="出生日期">
+          <el-date-picker v-model="editForm.date_of_birth" type="date" placeholder="选择日期" />
+        </el-form-item>
+        <el-form-item label="手机号"><el-input v-model="editForm.phone_number" /></el-form-item>
+        <el-form-item label="头像链接"><el-input v-model="editForm.avatar" /></el-form-item>
+        <el-form-item label="机构"><el-input v-model="editForm.institution" /></el-form-item>
+        <el-form-item label="研究领域"><el-input v-model="editForm.research_field" /></el-form-item>
+        <el-form-item label="用户等级">
+          <el-select v-model="editForm.user_tier" placeholder="请选择">
+            <el-option label="basic" value="basic" />
+            <el-option label="premium" value="premium" />
+            <el-option label="enterprise" value="enterprise" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template v-slot:footer>
+        <el-button @click="editDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="submitEdit">保存</el-button>
+      </template>
+    </el-dialog>
+
+
+
   </div>
 </template>
 
 <script lang="ts">
 
-import { getUserProfileList, getUserProfileDetail } from '@/api/profile';
+import { getUserProfileList, getUserProfileDetail, updateUserProfile } from '@/api/profile';
 import { defineComponent } from 'vue';
 import Pagination from '@/components/Pagination'; // Secondary package based on el-pagination
 import { formatDateTime } from '@/utils';
-
+import { ElMessage } from 'element-plus';
 
 
 export default defineComponent({
@@ -170,7 +204,21 @@ export default defineComponent({
         limit: 10
       },
       dialogVisible: false,        // 控制弹窗显示
-      currentUser: null as any     // 当前选中用户详情
+      currentUser: null as any,     // 当前选中用户详情
+      editDialogVisible: false,
+      editForm: {
+        email: '',
+        first_name: '',
+        last_name: '',
+        is_email_verified: false,
+        bio: '',
+        date_of_birth: '',
+        phone_number: '',
+        avatar: '',
+        institution: '',
+        research_field: '',
+        user_tier: 'basic'
+      } as any
 
     };
   },
@@ -217,6 +265,24 @@ export default defineComponent({
         this.currentUser = res.data;
         this.dialogVisible = true;
       });
+    },
+    handleEdit(row) {
+
+      getUserProfileDetail(row.user_id).then(res => {
+        console.log(res.data);
+        this.editForm = res.data;
+        this.editDialogVisible = true;
+      });
+    },
+    async submitEdit() {
+      try {
+        await updateUserProfile(this.editForm);
+        ElMessage.success('修改成功');
+        this.editDialogVisible = false;
+        this.getList(); // 重新拉取数据
+      } catch (error) {
+        console.log(error);
+      }
     },
     handleClose() {
       this.dialogVisible = false;

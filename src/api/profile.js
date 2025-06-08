@@ -16,3 +16,12 @@ export function getUserProfileDetail(id) {
     method: 'get'
   });
 }
+
+// 更新用户信息
+export function updateUserProfile(id, data) {
+  return request({
+    url: `/api/v1/profiles/${id}/`,
+    method: 'put',
+    data
+  });
+}
