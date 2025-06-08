@@ -45,4 +45,13 @@ export function deletePoint(id) {
   });
 }
 
+// 调整用户积分
+export function adjustPoints(data) {
+  return request({
+    url: `/api/v1/points/add_points/`,
+    method: 'post',
+    data
+  });
+}
+
 // import { getPointsList, createPoint, getPointDetail, updatePoint, deletePoint } from '@/api/points';

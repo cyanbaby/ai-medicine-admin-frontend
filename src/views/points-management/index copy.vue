@@ -2,7 +2,6 @@
   <div class="app-container">
     <div class="app-header text-right mb-4">
       <el-button type="primary" @click="handleAdd">添加积分记录</el-button>
-      <el-button type="primary" @click="handleAdjustPoints">调整用户积分</el-button>
     </div>
     <el-table v-loading="listLoading" class="w-full" :data="list" border fit highlight-current-row style="width: 100%">
       <!-- 积分记录ID Column -->
@@ -29,7 +28,7 @@
       <!-- 积分原因 Column -->
       <el-table-column width="150px" label="积分原因">
         <template v-slot="scope">
-          <span>{{ reasonTextMap[scope.row.reason] || scope.row.reason }}</span>
+          <span>{{ scope.row.reason }}</span>
         </template>
       </el-table-column>
 
@@ -57,8 +56,7 @@
     </el-table>
 
     <!-- Pagination Component -->
-    <pagination v-show="total > 0" :total="total" v-model:page="listQuery.page" v-model:limit="listQuery.limit"
-      @pagination="getList" />
+    <pagination v-show="total > 0" :total="total" v-model:page="listQuery.page" v-model:limit="listQuery.limit" @pagination="getList" />
 
     <!-- 积分详情弹窗 -->
     <el-dialog title="详情" v-model="dialogVisible" width="620px" :before-close="handleClose">
@@ -67,11 +65,9 @@
           <el-descriptions-item label="记录ID">{{ currentRow.id }}</el-descriptions-item>
           <el-descriptions-item label="用户名">{{ currentRow.username }}</el-descriptions-item>
           <el-descriptions-item label="积分数量">{{ currentRow.points }}</el-descriptions-item>
-          <el-descriptions-item label="积分原因">{{ reasonTextMap[currentRow.reason] || currentRow.reason
-            }}</el-descriptions-item>
+          <el-descriptions-item label="积分原因">{{ reasonTextMap[currentRow.reason] || currentRow.reason }}</el-descriptions-item>
           <el-descriptions-item label="积分说明" :span="2">{{ currentRow.description }}</el-descriptions-item>
-          <el-descriptions-item label="创建时间" :span="2">{{ formatDateTime(currentRow.created_at)
-            }}</el-descriptions-item>
+          <el-descriptions-item label="创建时间" :span="2">{{ formatDateTime(currentRow.created_at) }}</el-descriptions-item>
         </el-descriptions>
       </div>
     </el-dialog>
@@ -86,9 +82,7 @@
           <el-input v-model="addForm.points" />
         </el-form-item>
         <el-form-item label="积分原因">
-          <el-select v-model="addForm.reason" placeholder="请选择积分原因" filterable>
-            <el-option v-for="option in reasonOptions" :key="option.value" :label="option.label" :value="option.value" />
-          </el-select>
+          <el-input v-model="addForm.reason" />
         </el-form-item>
         <el-form-item label="描述">
           <el-input v-model="addForm.description" type="textarea" rows="3" />
@@ -110,9 +104,7 @@
           <el-input v-model="editForm.points" />
         </el-form-item>
         <el-form-item label="积分原因">
-          <el-select v-model="editForm.reason" placeholder="请选择积分原因" filterable>
-            <el-option v-for="option in reasonOptions" :key="option.value" :label="option.label" :value="option.value" />
-          </el-select>
+          <el-input v-model="editForm.reason" />
         </el-form-item>
         <el-form-item label="描述">
           <el-input v-model="editForm.description" type="textarea" rows="3" />
@@ -123,36 +115,6 @@
         <el-button type="primary" @click="submitEdit">保存</el-button>
       </template>
     </el-dialog>
-
-
-    <!-- 积分调整弹窗 -->
-    <el-dialog title="调整用户积分" v-model="adjustDialogVisible" width="620px"
-      :before-close="() => (adjustDialogVisible = false)">
-      <el-form :model="adjustForm" label-width="100px">
-        <el-form-item label="选择用户">
-          <el-select v-model="adjustForm.user_id" placeholder="请选择用户" filterable>
-            <el-option v-for="user in userOptions" :key="user.user_id" :label="user.username" :value="user.user_id" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="积分数量">
-          <el-input v-model="adjustForm.points" />
-        </el-form-item>
-        <el-form-item label="积分原因">
-          <el-select v-model="adjustForm.reason" placeholder="请选择积分原因" filterable>
-            <el-option v-for="option in reasonOptions" :key="option.value" :label="option.label" :value="option.value" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="描述">
-          <el-input v-model="adjustForm.description" type="textarea" rows="3" />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <el-button @click="adjustDialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="submitAdjust">确认</el-button>
-      </template>
-    </el-dialog>
-
-
   </div>
 </template>
 
@@ -160,8 +122,7 @@
 import { defineComponent } from 'vue';
 import Pagination from '@/components/Pagination';
 import { formatDateTime } from '@/utils';
-import { getUserProfileList } from '@/api/profile';
-import { getPointsList, createPoint, getPointDetail, updatePoint, deletePoint, adjustPoints } from '@/api/points';
+import { getPointsList, createPoint, getPointDetail, updatePoint, deletePoint } from '@/api/points';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
 export default defineComponent({
@@ -178,6 +139,7 @@ export default defineComponent({
       },
       dialogVisible: false,
       currentRow: null as any,
+      reasonTextMap: {},
       editDialogVisible: false,
       editForm: {} as any,
       addDialogVisible: false,
@@ -186,36 +148,8 @@ export default defineComponent({
         points: '',
         reason: '',
         description: ''
-      } as any,
-      adjustDialogVisible: false,
-      adjustForm: {
-        user_id: '',
-        points: '',
-        reason: '',
-        description: ''
-      } as any,
-      userOptions: [] as any[],
-      reasonOptions: [
-        { value: 'registration', label: '注册奖励' },
-        { value: 'login', label: '登录奖励' },
-        { value: 'post', label: '发帖奖励' },
-        { value: 'comment', label: '评论奖励' },
-        { value: 'like', label: '点赞奖励' },
-        { value: 'share', label: '分享奖励' },
-        { value: 'purchase', label: '购买/消费' },
-        { value: 'admin', label: '管理员调整' },
-        { value: 'recharge', label: '用户充值' },
-        { value: 'other', label: '其他' }
-      ]
+      } as any
     };
-  },
-  computed: {
-    reasonTextMap() {
-      return this.reasonOptions.reduce((acc, option) => {
-        acc[option.value] = option.label;
-        return acc;
-      }, {} as Record<string, string>);
-    }
   },
   created() {
     this.getList();
@@ -285,28 +219,7 @@ export default defineComponent({
           this.getList();
         });
       });
-    },
-    handleAdjustPoints() {
-      getUserProfileList({ page: 1, pageSize: 1000 }).then(res => {
-        this.userOptions = res.data.results;
-        this.adjustForm = {
-          user_id: '',
-          points: '',
-          reason: '',
-          description: ''
-        };
-        this.adjustDialogVisible = true;
-      });
-    },
-    submitAdjust() {
-      adjustPoints(this.adjustForm).then(() => {
-        ElMessage.success('积分调整成功');
-        this.adjustDialogVisible = false;
-        this.getList();
-      }).catch(() => {
-        ElMessage.error('积分调整失败');
-      });
-    },
+    }
   }
 });
 </script>
@@ -314,12 +227,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 .user-detail-descriptions {
   margin: 20px 0;
-
   .el-descriptions__label {
     font-weight: bold;
     background-color: #f5f7fa;
   }
-
   .el-descriptions__content {
     color: #606266;
   }
