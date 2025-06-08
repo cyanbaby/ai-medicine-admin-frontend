@@ -276,7 +276,7 @@ export default defineComponent({
     },
     async submitEdit() {
       try {
-        await updateUserProfile(this.editForm);
+        await updateUserProfile(this.editForm.user_id, this.editForm);
         ElMessage.success('修改成功');
         this.editDialogVisible = false;
         this.getList(); // 重新拉取数据
