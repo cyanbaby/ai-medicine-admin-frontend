@@ -1,7 +1,7 @@
 // import dark theme
-@use "element-plus/theme-chalk/src/dark/css-vars.scss" as *;
-@use "./element-variables.scss";
-@use "./element-ui.scss";
+@use 'element-plus/theme-chalk/src/dark/css-vars.scss' as *;
+@use './element-variables.scss';
+@use './element-ui.scss';
 @use './sidebar.scss';
 
 // :root {
@@ -10,12 +10,12 @@
 
 body {
   height: 100%;
-  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
-    "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  margin: 0;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  margin: 0;
 }
 
 label {
@@ -23,8 +23,8 @@ label {
 }
 
 html {
-  height: 100%;
   box-sizing: border-box;
+  height: 100%;
 }
 
 #app {
@@ -50,13 +50,11 @@ a {
 }
 
 code {
-  border-radius: 2px;
   padding: 2px 4px;
-  background-color: var(--ep-color-primary-light-9);
   color: var(--ep-color-primary);
+  background-color: var(--ep-color-primary-light-9);
+  border-radius: 2px;
 }
-
-
 
 a:focus,
 a:active {
@@ -66,9 +64,9 @@ a:active {
 a,
 a:focus,
 a:hover {
-  cursor: pointer;
   color: inherit;
   text-decoration: none;
+  cursor: pointer;
 }
 
 div:focus {
@@ -105,25 +103,26 @@ div:focus {
 
 .clearfix {
   &:after {
-    visibility: hidden;
     display: block;
-    font-size: 0;
-    content: " ";
     clear: both;
     height: 0;
+    font-size: 0;
+    visibility: hidden;
+    content: ' ';
   }
 }
 
 aside {
-  background: #eef1f6;
-  padding: 8px 24px;
-  margin-bottom: 20px;
-  border-radius: 2px;
   display: block;
-  line-height: 32px;
-  font-size: 16px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  margin-bottom: 20px;
+  padding: 8px 24px;
   color: #2c3e50;
+  font-size: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  line-height: 32px;
+  background: #eef1f6;
+  border-radius: 2px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
@@ -143,31 +142,42 @@ aside {
 }
 
 .components-container {
-  margin: 30px 50px;
   position: relative;
+  margin: 30px 50px;
 }
 
 .pagination-container {
   margin-top: 30px;
+  &.pagination-wrapper {
+    margin-top: 0px !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+  }
 }
 
 .text-center {
-  text-align: center
+  text-align: center;
 }
 
 .sub-navbar {
-  height: 50px;
-  line-height: 50px;
   position: relative;
   width: 100%;
-  text-align: right;
+  height: 50px;
   padding-right: 20px;
+  line-height: 50px;
+  text-align: right;
+  background: linear-gradient(
+    90deg,
+    rgba(32, 182, 249, 1) 0%,
+    rgba(32, 182, 249, 1) 0%,
+    rgba(33, 120, 241, 1) 100%,
+    rgba(33, 120, 241, 1) 100%
+  );
   transition: 600ms ease position;
-  background: linear-gradient(90deg, rgba(32, 182, 249, 1) 0%, rgba(32, 182, 249, 1) 0%, rgba(33, 120, 241, 1) 100%, rgba(33, 120, 241, 1) 100%);
 
   .subtitle {
-    font-size: 20px;
     color: #fff;
+    font-size: 20px;
   }
 
   &.draft {
@@ -194,8 +204,8 @@ aside {
 
   .filter-item {
     display: inline-block;
-    vertical-align: middle;
     margin-bottom: 10px;
+    vertical-align: middle;
   }
 }
 
@@ -206,4 +216,33 @@ aside {
 
 .multiselect--active {
   z-index: 1000 !important;
+}
+
+th.el-table__cell {
+  .cell {
+    color: rgba(0, 0, 0, 0.4);
+    font-weight: 400;
+  }
+}
+
+.el-descriptions__label.el-descriptions__cell.is-bordered-label {
+  // color: rgba(0, 0, 0, 0.4) !important;
+  color: rgba(0, 0, 0, 0.6) !important;
+  font-weight: 400 !important;
+}
+
+.el-form-item__label {
+  font-weight: 400 !important;
+}
+
+.el-table__header {
+  .el-table__cell {
+    padding: 12px 0 !important;
+  }
+}
+
+.el-table__body {
+  .el-table__cell {
+    padding: 10px 0 !important;
+  }
 }

@@ -1,140 +1,200 @@
 <template>
-  <div class="app-container">
-    <el-table v-loading="listLoading" class="w-full" :data="list" border fit highlight-current-row style="width: 100%">
+  <div class="app-container absolute inset-0 flex flex-col">
+    <!-- <div class="app-header mb-4 flex-shrink-0">
+      <el-input v-model="search" placeholder="搜索" style="width: 220px" />
+      <el-button type="primary" class="ml-4">搜索</el-button>
+    </div> -->
+    <div :class="`app-body flex-1 overflow-hidden ${tableWrapOnlyClass}`">
+      <el-table
+        v-loading="listLoading"
+        class="w-full"
+        :data="list"
+        :height="height"
+        border
+        style="width: 100%"
+      >
+        <!-- 用户ID Column -->
+        <el-table-column label="用户ID" width="80">
+          <template v-slot="scope">
+            <span>{{ scope.row.user_id }}</span>
+          </template>
+        </el-table-column>
 
-      <!-- 用户ID Column -->
-      <el-table-column align="center" label="用户ID" width="80">
-        <template v-slot="scope">
-          <span>{{ scope.row.user_id }}</span>
-        </template>
-      </el-table-column>
+        <!-- 用户名 Column -->
+        <el-table-column width="180px" label="用户名">
+          <template v-slot="scope">
+            <span>{{ scope.row.username }}</span>
+          </template>
+        </el-table-column>
 
-      <!-- 用户名 Column -->
-      <el-table-column width="180px" align="center" label="用户名">
-        <template v-slot="scope">
-          <span>{{ scope.row.username }}</span>
-        </template>
-      </el-table-column>
+        <!-- 邮箱 Column -->
+        <el-table-column width="220px" label="邮箱">
+          <template v-slot="scope">
+            <span>{{ scope.row.email }}</span>
+          </template>
+        </el-table-column>
 
-      <!-- 邮箱 Column -->
-      <el-table-column width="220px" align="center" label="邮箱">
-        <template v-slot="scope">
-          <span>{{ scope.row.email }}</span>
-        </template>
-      </el-table-column>
+        <!-- 姓名 Column -->
+        <el-table-column width="150px" label="姓名">
+          <template v-slot="scope">
+            <span>{{ scope.row.first_name }} {{ scope.row.last_name }}</span>
+          </template>
+        </el-table-column>
 
-      <!-- 姓名 Column -->
-      <el-table-column width="150px" align="center" label="姓名">
-        <template v-slot="scope">
-          <span>{{ scope.row.first_name }} {{ scope.row.last_name }}</span>
-        </template>
-      </el-table-column>
+        <!-- 是否为工作人员 Column -->
+        <el-table-column width="130px" label="是否为工作人员">
+          <template v-slot="scope">
+            <span>{{ scope.row.is_staff ? '是' : '否' }}</span>
+          </template>
+        </el-table-column>
 
-      <!-- 是否为工作人员 Column -->
-      <el-table-column width="130px" align="center" label="是否为工作人员">
-        <template v-slot="scope">
-          <span>{{ scope.row.is_staff ? '是' : '否' }}</span>
-        </template>
-      </el-table-column>
+        <!-- 是否为超级管理员 Column -->
+        <el-table-column width="150px" label="是否为超级管理员">
+          <template v-slot="scope">
+            <span>{{ scope.row.is_superuser ? '是' : '否' }}</span>
+          </template>
+        </el-table-column>
 
-      <!-- 是否为超级管理员 Column -->
-      <el-table-column width="150px" align="center" label="是否为超级管理员">
-        <template v-slot="scope">
-          <span>{{ scope.row.is_superuser ? '是' : '否' }}</span>
-        </template>
-      </el-table-column>
+        <!-- 积分 Column -->
+        <el-table-column width="100px" label="积分">
+          <template v-slot="scope">
+            <span>{{ scope.row.points }}</span>
+          </template>
+        </el-table-column>
 
-      <!-- 积分 Column -->
-      <el-table-column width="100px" align="center" label="积分">
-        <template v-slot="scope">
-          <span>{{ scope.row.points }}</span>
-        </template>
-      </el-table-column>
+        <!-- 更新时间 Column -->
+        <el-table-column width="180px" label="最后更新时间">
+          <template v-slot="scope">
+            <span>{{ formatDateTime(scope.row.updated_at) }}</span>
+          </template>
+        </el-table-column>
 
-      <!-- 更新时间 Column -->
-      <el-table-column width="180px" align="center" label="最后更新时间">
-        <template v-slot="scope">
-          <span>{{ formatDateTime(scope.row.updated_at) }}</span>
-        </template>
-      </el-table-column>
+        <!-- 邮箱是否已验证 Column -->
+        <el-table-column width="150px" label="邮箱是否已验证">
+          <template v-slot="scope">
+            <span>{{ scope.row.is_email_verified ? '是' : '否' }}</span>
+          </template>
+        </el-table-column>
 
-      <!-- 邮箱是否已验证 Column -->
-      <el-table-column width="150px" align="center" label="邮箱是否已验证">
-        <template v-slot="scope">
-          <span>{{ scope.row.is_email_verified ? '是' : '否' }}</span>
-        </template>
-      </el-table-column>
+        <!-- 用户等级 Column -->
+        <el-table-column width="120px" label="用户等级">
+          <template v-slot="scope">
+            <span>{{ scope.row.user_tier_display }}</span>
+          </template>
+        </el-table-column>
 
-      <!-- 用户等级 Column -->
-      <el-table-column width="120px" align="center" label="用户等级">
-        <template v-slot="scope">
-          <span>{{ scope.row.user_tier_display }}</span>
-        </template>
-      </el-table-column>
+        <!-- 是否为高级用户 Column -->
+        <el-table-column width="150px" label="是否为高级用户">
+          <template v-slot="scope">
+            <span>{{ scope.row.is_premium ? '是' : '否' }}</span>
+          </template>
+        </el-table-column>
 
-      <!-- 是否为高级用户 Column -->
-      <el-table-column width="150px" align="center" label="是否为高级用户">
-        <template v-slot="scope">
-          <span>{{ scope.row.is_premium ? '是' : '否' }}</span>
-        </template>
-      </el-table-column>
+        <!-- 是否为企业用户 Column -->
+        <el-table-column width="150px" label="是否为企业用户">
+          <template v-slot="scope">
+            <span>{{ scope.row.is_enterprise ? '是' : '否' }}</span>
+          </template>
+        </el-table-column>
 
-      <!-- 是否为企业用户 Column -->
-      <el-table-column width="150px" align="center" label="是否为企业用户">
-        <template v-slot="scope">
-          <span>{{ scope.row.is_enterprise ? '是' : '否' }}</span>
-        </template>
-      </el-table-column>
+        <!-- 创建时间 Column -->
+        <el-table-column width="180px" label="创建时间">
+          <template v-slot="scope">
+            <span>{{ formatDateTime(scope.row.created_at) }}</span>
+          </template>
+        </el-table-column>
 
-      <!-- 创建时间 Column -->
-      <!-- width="180px" -->
-      <el-table-column align="center" label="创建时间">
-        <template v-slot="scope">
-          <span>{{ formatDateTime(scope.row.created_at) }}</span>
-        </template>
-      </el-table-column>
-
-      <!-- Actions Column -->
-      <el-table-column align="center" fixed="right" label="操作" width="150px">
-        <template v-slot="scope">
-          <el-button type="text" size="small" @click="handleDetail(scope.row)">
-            详情
-          </el-button>
-          <el-button type="text" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
+        <!-- Actions Column -->
+        <el-table-column
+          align="center"
+          fixed="right"
+          label="操作"
+          width="150px"
+        >
+          <template v-slot="scope">
+            <el-button
+              type="text"
+              size="small"
+              @click="handleDetail(scope.row)"
+            >
+              详情
+            </el-button>
+            <el-button type="text" size="small" @click="handleEdit(scope.row)"
+              >编辑</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
 
     <!-- Pagination Component -->
-    <pagination v-show="total > 0" :total="total" v-model:page="listQuery.page" v-model:limit="listQuery.limit"
-      @pagination="getList" />
 
+    <div class="flex-shrink-0 overflow-hidden">
+      <pagination
+        v-show="total > 0"
+        class="pagination-wrapper"
+        :total="total"
+        v-model:page="listQuery.page"
+        v-model:limit="listQuery.limit"
+        @pagination="getList"
+      />
+    </div>
     <!-- 添加在 el-table 下方，pagination 上方 -->
 
-    <el-dialog title="用户详情" v-model="dialogVisible" width="620px" :before-close="handleClose">
+    <el-dialog
+      title="用户详情"
+      v-model="dialogVisible"
+      width="620px"
+      :before-close="handleClose"
+    >
       <div v-if="currentUser">
         <el-descriptions :column="2" border class="user-detail-descriptions">
-          <el-descriptions-item label="用户ID">{{ currentUser.user_id }}</el-descriptions-item>
-          <el-descriptions-item label="用户名">{{ currentUser.username }}</el-descriptions-item>
+          <el-descriptions-item label="用户ID">{{
+            currentUser.user_id
+          }}</el-descriptions-item>
+          <el-descriptions-item label="用户名">{{
+            currentUser.username
+          }}</el-descriptions-item>
 
-          <el-descriptions-item label="邮箱">{{ currentUser.email }}</el-descriptions-item>
-          <el-descriptions-item label="姓名">{{ currentUser.first_name }} {{ currentUser.last_name
-            }}</el-descriptions-item>
+          <el-descriptions-item label="邮箱">{{
+            currentUser.email
+          }}</el-descriptions-item>
+          <el-descriptions-item label="姓名"
+            >{{ currentUser.first_name }}
+            {{ currentUser.last_name }}</el-descriptions-item
+          >
 
-          <el-descriptions-item label="是否为工作人员">{{ currentUser.is_staff ? '是' : '否' }}</el-descriptions-item>
-          <el-descriptions-item label="是否为超级管理员">{{ currentUser.is_superuser ? '是' : '否' }}</el-descriptions-item>
+          <el-descriptions-item label="是否为工作人员">{{
+            currentUser.is_staff ? '是' : '否'
+          }}</el-descriptions-item>
+          <el-descriptions-item label="是否为超级管理员">{{
+            currentUser.is_superuser ? '是' : '否'
+          }}</el-descriptions-item>
 
-          <el-descriptions-item label="积分">{{ currentUser.points }}</el-descriptions-item>
-          <el-descriptions-item label="邮箱是否验证">{{ currentUser.is_email_verified ? '是' : '否' }}</el-descriptions-item>
+          <el-descriptions-item label="积分">{{
+            currentUser.points
+          }}</el-descriptions-item>
+          <el-descriptions-item label="邮箱是否验证">{{
+            currentUser.is_email_verified ? '是' : '否'
+          }}</el-descriptions-item>
 
-          <el-descriptions-item label="用户等级">{{ currentUser.user_tier_display }}</el-descriptions-item>
-          <el-descriptions-item label="是否为高级用户">{{ currentUser.is_premium ? '是' : '否' }}</el-descriptions-item>
+          <el-descriptions-item label="用户等级">{{
+            currentUser.user_tier_display
+          }}</el-descriptions-item>
+          <el-descriptions-item label="是否为高级用户">{{
+            currentUser.is_premium ? '是' : '否'
+          }}</el-descriptions-item>
 
-          <el-descriptions-item label="是否为企业用户">{{ currentUser.is_enterprise ? '是' : '否' }}</el-descriptions-item>
-          <el-descriptions-item label="创建时间">{{ formatDateTime(currentUser.created_at) }}</el-descriptions-item>
+          <el-descriptions-item label="是否为企业用户">{{
+            currentUser.is_enterprise ? '是' : '否'
+          }}</el-descriptions-item>
+          <el-descriptions-item label="创建时间">{{
+            formatDateTime(currentUser.created_at)
+          }}</el-descriptions-item>
 
-          <el-descriptions-item label="最后更新时间">{{ formatDateTime(currentUser.updated_at) }}</el-descriptions-item>
+          <el-descriptions-item label="最后更新时间">{{
+            formatDateTime(currentUser.updated_at)
+          }}</el-descriptions-item>
         </el-descriptions>
       </div>
 
@@ -143,24 +203,43 @@
       </template>
     </el-dialog>
 
-
     <!-- 编辑弹窗 -->
     <el-dialog title="编辑用户信息" v-model="editDialogVisible" width="600px">
       <el-form :model="editForm" label-width="120px">
-        <el-form-item label="邮箱"><el-input v-model="editForm.email" /></el-form-item>
-        <el-form-item label="名"><el-input v-model="editForm.first_name" /></el-form-item>
-        <el-form-item label="姓"><el-input v-model="editForm.last_name" /></el-form-item>
+        <el-form-item label="邮箱"
+          ><el-input v-model="editForm.email"
+        /></el-form-item>
+        <el-form-item label="名"
+          ><el-input v-model="editForm.first_name"
+        /></el-form-item>
+        <el-form-item label="姓"
+          ><el-input v-model="editForm.last_name"
+        /></el-form-item>
         <el-form-item label="邮箱已验证">
           <el-switch v-model="editForm.is_email_verified" />
         </el-form-item>
-        <el-form-item label="简介"><el-input v-model="editForm.bio" type="textarea" /></el-form-item>
+        <el-form-item label="简介"
+          ><el-input v-model="editForm.bio" type="textarea"
+        /></el-form-item>
         <el-form-item label="出生日期">
-          <el-date-picker v-model="editForm.date_of_birth" type="date" placeholder="选择日期" />
+          <el-date-picker
+            v-model="editForm.date_of_birth"
+            type="date"
+            placeholder="选择日期"
+          />
         </el-form-item>
-        <el-form-item label="手机号"><el-input v-model="editForm.phone_number" /></el-form-item>
-        <el-form-item label="头像链接"><el-input v-model="editForm.avatar" /></el-form-item>
-        <el-form-item label="机构"><el-input v-model="editForm.institution" /></el-form-item>
-        <el-form-item label="研究领域"><el-input v-model="editForm.research_field" /></el-form-item>
+        <el-form-item label="手机号"
+          ><el-input v-model="editForm.phone_number"
+        /></el-form-item>
+        <el-form-item label="头像链接"
+          ><el-input v-model="editForm.avatar"
+        /></el-form-item>
+        <el-form-item label="机构"
+          ><el-input v-model="editForm.institution"
+        /></el-form-item>
+        <el-form-item label="研究领域"
+          ><el-input v-model="editForm.research_field"
+        /></el-form-item>
         <el-form-item label="用户等级">
           <el-select v-model="editForm.user_tier" placeholder="请选择">
             <el-option label="basic" value="basic" />
@@ -174,37 +253,36 @@
         <el-button type="primary" @click="submitEdit">保存</el-button>
       </template>
     </el-dialog>
-
-
-
   </div>
 </template>
 
 <script lang="ts">
-
-import { getUserProfileList, getUserProfileDetail, updateUserProfile } from '@/api/profile';
+import { nanoid } from 'nanoid';
+import { debounce, isNumber } from 'lodash';
+import {
+  getUserProfileList,
+  getUserProfileDetail,
+  updateUserProfile
+} from '@/api/profile';
 import { defineComponent } from 'vue';
 import Pagination from '@/components/Pagination'; // Secondary package based on el-pagination
 import { formatDateTime } from '@/utils';
 import { ElMessage } from 'element-plus';
 
-
 export default defineComponent({
   name: 'UserProfile',
   components: { Pagination },
   data() {
-
-
     return {
       list: [],
       total: 0,
       listLoading: false,
       listQuery: {
         page: 1,
-        limit: 10
+        limit: 20
       },
-      dialogVisible: false,        // 控制弹窗显示
-      currentUser: null as any,     // 当前选中用户详情
+      dialogVisible: false, // 控制弹窗显示
+      currentUser: null as any, // 当前选中用户详情
       editDialogVisible: false,
       editForm: {
         email: '',
@@ -218,35 +296,66 @@ export default defineComponent({
         institution: '',
         research_field: '',
         user_tier: 'basic'
-      } as any
-
+      } as any,
+      search: '',
+      tableWrapOnlyClass: 'nona-class-' + nanoid(),
+      height: '',
+      debouncedSetHeight: null as any,
+      observer: null as any
     };
   },
-  watch: {
-
-  },
+  watch: {},
   created() {
+    this.debouncedSetHeight = debounce(this.setHeight, 500);
     this.getList();
   },
   mounted() {
-
+    this.setHeight();
+    this.observerTableParent();
   },
-  unmounted() {
-
-  },
+  unmounted() {},
   methods: {
-    getList() {
+    // 监听表格父节点变化
+    observerTableParent() {
+      const targetNode = document.querySelector(`.${this.tableWrapOnlyClass}`);
 
+      if (this.observer) {
+        this.observer.disconnect();
+      }
+
+      this.observer = new ResizeObserver((mutations) => {
+        mutations.forEach(() => {
+          this.debouncedSetHeight();
+        });
+      });
+
+      var config = { attributes: true, childList: true, subtree: true };
+
+      this.observer.observe(targetNode, config);
+    },
+    setHeight() {
+      this.$nextTick(() => {
+        const height = (
+          document.querySelector(`.${this.tableWrapOnlyClass}`) as any
+        )?.offsetHeight;
+
+        if (isNumber(height)) {
+          this.height = height - 24 + 'px';
+        }
+      });
+    },
+    getList() {
       getUserProfileList({
         page: this.listQuery.page,
         pageSize: this.listQuery.limit
-      }).then(res => {
-        const data = res.data;
-        this.list = data.results;
-        this.total = data.count;
-        // this.listQuery.page = data.page;
-        // this.listQuery.limit = data.pageSize;
       })
+        .then((res) => {
+          const data = res.data;
+          this.list = data.results;
+          this.total = data.count;
+          // this.listQuery.page = data.page;
+          // this.listQuery.limit = data.pageSize;
+        })
         .finally(() => {
           this.listLoading = false;
         });
@@ -261,14 +370,13 @@ export default defineComponent({
       return statusMap[status];
     },
     handleDetail(user: any) {
-      getUserProfileDetail(user.user_id).then(res => {
+      getUserProfileDetail(user.user_id).then((res) => {
         this.currentUser = res.data;
         this.dialogVisible = true;
       });
     },
     handleEdit(row) {
-
-      getUserProfileDetail(row.user_id).then(res => {
+      getUserProfileDetail(row.user_id).then((res) => {
         console.log(res.data);
         this.editForm = res.data;
         this.editDialogVisible = true;
