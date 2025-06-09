@@ -229,9 +229,9 @@
         <el-form-item label="手机号"
           ><el-input v-model="editForm.phone_number"
         /></el-form-item>
-        <el-form-item label="头像链接"
+        <!-- <el-form-item label="头像链接"
           ><el-input v-model="editForm.avatar"
-        /></el-form-item>
+        /></el-form-item> -->
         <el-form-item label="机构"
           ><el-input v-model="editForm.institution"
         /></el-form-item>
