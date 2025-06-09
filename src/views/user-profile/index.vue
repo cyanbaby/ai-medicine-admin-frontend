@@ -127,8 +127,6 @@
       </el-table>
     </div>
 
-    <!-- Pagination Component -->
-
     <div class="flex-shrink-0 overflow-hidden">
       <pagination
         v-show="total > 0"
@@ -274,6 +272,10 @@ export default defineComponent({
   components: { Pagination },
   data() {
     return {
+      tableWrapOnlyClass: 'nona-class-' + nanoid(),
+      height: '',
+      debouncedSetHeight: null as any,
+      observer: null as any,
       list: [],
       total: 0,
       listLoading: false,
@@ -297,11 +299,7 @@ export default defineComponent({
         research_field: '',
         user_tier: 'basic'
       } as any,
-      search: '',
-      tableWrapOnlyClass: 'nona-class-' + nanoid(),
-      height: '',
-      debouncedSetHeight: null as any,
-      observer: null as any
+      search: ''
     };
   },
   watch: {},
