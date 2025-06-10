@@ -12,7 +12,7 @@
         <h3 class="title">Login Form</h3>
       </div>
 
-      <el-form-item prop="username" class="mb-4">
+      <el-form-item prop="username" class="mb-6">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
@@ -33,7 +33,7 @@
         placement="right"
         manual
       >
-        <el-form-item prop="password">
+        <el-form-item prop="password" class="mb-6">
           <span class="svg-container">
             <svg-icon icon-class="password" />
           </span>

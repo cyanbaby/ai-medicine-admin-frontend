@@ -209,9 +209,9 @@
         <el-form-item label="最大Token数">
           <el-input-number v-model="addForm.max_tokens" :min="1" />
         </el-form-item>
-        <el-form-item label="温度范围">
+        <!-- <el-form-item label="温度范围">
           <el-input v-model="addForm.temperature_range" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="输入Token价格">
           <el-input v-model="addForm.price_per_1k_tokens" />
         </el-form-item>
@@ -266,9 +266,9 @@
         <el-form-item label="最大Token数">
           <el-input-number v-model="editForm.max_tokens" :min="1" />
         </el-form-item>
-        <el-form-item label="温度范围">
+        <!-- <el-form-item label="温度范围">
           <el-input v-model="editForm.temperature_range" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="输入Token价格">
           <el-input v-model="editForm.price_per_1k_tokens" />
         </el-form-item>
@@ -296,29 +296,8 @@ import {
   createModel,
   getModelDetail,
   updateModel,
-  patchModel,
-  deleteModel,
-  toggleModelEnable,
-  toggleModelPremium
+  deleteModel
 } from '@/api/models';
-
-import {
-  getPointsList,
-  createPoint,
-  getPointDetail,
-  updatePoint,
-  deletePoint
-} from '@/api/points';
-import {
-  getConfigsList,
-  createConfig,
-  getConfigDetail,
-  updateConfig,
-  patchConfig,
-  deleteConfig,
-  getSpecificConfig,
-  setSpecificConfig
-} from '@/api/configs';
 
 import { ElMessage, ElMessageBox } from 'element-plus';
 
@@ -355,9 +334,9 @@ export default defineComponent({
         is_enabled: true,
         is_premium: true,
         icon_path: '',
-        context_window: 2147483647,
-        max_tokens: 2147483647,
-        temperature_range: '',
+        context_window: undefined,
+        max_tokens: undefined,
+        temperature_range: undefined,
         price_per_1k_tokens: '3',
         price_per_1k_output_tokens: '',
         metadata: ''
@@ -446,15 +425,27 @@ export default defineComponent({
     },
     handleAdd() {
       this.addForm = {
-        key: '',
-        value: '',
-        value_type: 'string',
-        description: ''
+        name: '',
+        display_name: '',
+        description: '',
+        provider: 'openai',
+        api_base_url: '',
+        api_key: '',
+        api_secret: '',
+        is_enabled: true,
+        is_premium: true,
+        icon_path: '',
+        context_window: 1,
+        max_tokens: 1,
+        temperature_range: 1,
+        price_per_1k_tokens: '1',
+        price_per_1k_output_tokens: '1',
+        metadata: ''
       };
       this.addDialogVisible = true;
     },
     submitEdit() {
-      updateConfig(this.editForm.id, this.editForm)
+      updateModel(this.editForm.id, this.editForm)
         .then(() => {
           ElMessage.success('保存成功');
           this.editDialogVisible = false;
