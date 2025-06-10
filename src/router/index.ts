@@ -4,7 +4,7 @@ import type { Router, RouteRecordRaw, RouteComponent } from 'vue-router';
 import { Help as IconHelp } from '@element-plus/icons-vue';
 
 /* Layout */
-const Layout = ():RouteComponent => import('@/layout/index.vue');
+const Layout = (): RouteComponent => import('@/layout/index.vue');
 
 /* Router Modules */
 // import componentsRouter from './modules/components';
@@ -19,7 +19,7 @@ const Layout = ():RouteComponent => import('@/layout/index.vue');
  *
  * 注意：hidden、alwaysShow 属性配置移动到了meta中！！！
  */
-export const constantRoutes:RouteRecordRaw[] = [
+export const constantRoutes: RouteRecordRaw[] = [
   {
     path: '/redirect',
     component: Layout,
@@ -61,7 +61,7 @@ export const constantRoutes:RouteRecordRaw[] = [
         component: () => import('@/views/dashboard/index.vue'),
         name: 'Dashboard',
         meta: { title: '首页', icon: 'component', affix: true }
-      },
+      }
     ]
   },
   // #region 用户管理
@@ -104,10 +104,22 @@ export const constantRoutes:RouteRecordRaw[] = [
       }
     ]
   },
+
+  {
+    path: '/admin-models',
+    component: Layout,
+    redirect: '/admin-models/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/admin-models/index.vue'),
+        name: 'AdminModels',
+        meta: { title: '模型管理', icon: 'component', affix: true }
+      }
+    ]
+  },
+
   // #endregion
-
-
-  
 
   {
     path: '/profile',
@@ -131,7 +143,7 @@ export const constantRoutes:RouteRecordRaw[] = [
  *
  * 注意：hidden、alwaysShow 属性配置移动到了meta中！！！
  */
-export const asyncRoutes:RouteRecordRaw[] = [
+export const asyncRoutes: RouteRecordRaw[] = [
   // {
   //   path: '/permission',
   //   component: Layout,
@@ -254,19 +266,20 @@ export const asyncRoutes:RouteRecordRaw[] = [
   // },
 
   // 404 page must be placed at the end !!!
-  { path: '/:pathMatch(.*)*', redirect: '/404', meta: { hidden: true }}
+  { path: '/:pathMatch(.*)*', redirect: '/404', meta: { hidden: true } }
 ];
 
 console.log('BASE_URL=', import.meta.env);
 
-const createTheRouter = ():Router => createRouter({
-  // history: createWebHashHistory(import.meta.env.BASE_URL),
-  // 注意，如果要配置 HTML5 模式，则需要修改nginx配置，参考资料：
-  // https://router.vuejs.org/zh/guide/essentials/history-mode.html
-  history: createWebHistory(import.meta.env.BASE_URL),
-  scrollBehavior: () => ({ top: 0 }),
-  routes: constantRoutes
-});
+const createTheRouter = (): Router =>
+  createRouter({
+    // history: createWebHashHistory(import.meta.env.BASE_URL),
+    // 注意，如果要配置 HTML5 模式，则需要修改nginx配置，参考资料：
+    // https://router.vuejs.org/zh/guide/essentials/history-mode.html
+    history: createWebHistory(import.meta.env.BASE_URL),
+    scrollBehavior: () => ({ top: 0 }),
+    routes: constantRoutes
+  });
 
 interface RouterPro extends Router {
   matcher: unknown;

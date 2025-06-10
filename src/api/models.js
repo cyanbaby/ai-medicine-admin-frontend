@@ -1,8 +1,4 @@
-
-
 import request from '@/utils/request';
-
-
 
 // 获取模型列表
 export function getModelsList(query) {
