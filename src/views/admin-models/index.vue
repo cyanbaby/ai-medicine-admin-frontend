@@ -297,7 +297,7 @@ import {
   getModelDetail,
   updateModel,
   deleteModel
-} from '@/api/models';
+} from '@/api/full-models';
 
 import { ElMessage, ElMessageBox } from 'element-plus';
 
