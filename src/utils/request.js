@@ -11,8 +11,7 @@ const service = axios.create({
 
 // request interceptor
 service.interceptors.request.use(
-  config => {
-
+  (config) => {
     console.group('config');
     console.log(config.url);
     console.log(config);
@@ -24,11 +23,11 @@ service.interceptors.request.use(
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['Authorization'] = 'Bearer '+token;
+      config.headers['Authorization'] = 'Bearer ' + token;
     }
     return config;
   },
-  error => {
+  (error) => {
     // do something with request error
     console.log(error); // for debug
     return Promise.reject(error);
@@ -40,14 +39,14 @@ service.interceptors.response.use(
   /**
    * If you want to get http information such as headers or status
    * Please return  response => response
-  */
+   */
 
   /**
    * Determine the request status by custom code
    * Here is just an example
    * You can also judge the status by HTTP Status Code
    */
-  response => {
+  (response) => {
     console.group('response');
     console.log(response);
     console.groupEnd();
@@ -57,7 +56,7 @@ service.interceptors.response.use(
     // console.groupEnd();
 
     // if the custom code is not 20000, it is judged as an error.
-    if (res.status !== 200 && res.status !== 201) {
+    if (res.status !== 200 && res.status !== 201 && res.status !== 204) {
       ElMessage({
         message: res.message || 'Error',
         type: 'error',
@@ -67,11 +66,15 @@ service.interceptors.response.use(
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
       if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
         // to re-login
-        ElMessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-          confirmButtonText: 'Re-Login',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        }).then(() => {
+        ElMessageBox.confirm(
+          'You have been logged out, you can cancel to stay on this page, or log in again',
+          'Confirm logout',
+          {
+            confirmButtonText: 'Re-Login',
+            cancelButtonText: 'Cancel',
+            type: 'warning'
+          }
+        ).then(() => {
           store.user().resetToken();
           location.reload();
         });
@@ -82,7 +85,7 @@ service.interceptors.response.use(
       return res;
     }
   },
-  error => {
+  (error) => {
     console.log('err' + error); // for debug
     ElMessage({
       message: error.message,

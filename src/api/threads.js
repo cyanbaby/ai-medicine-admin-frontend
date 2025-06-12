@@ -1,7 +1,4 @@
-
 import request from '@/utils/request';
-
-
 
 // 获取所有线程列表
 export function getThreadsList(params) {

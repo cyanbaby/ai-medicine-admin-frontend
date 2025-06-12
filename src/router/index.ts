@@ -118,7 +118,20 @@ export const constantRoutes: RouteRecordRaw[] = [
       }
     ]
   },
-
+  // 对话线程管理
+  {
+    path: '/threads',
+    component: Layout,
+    redirect: '/threads/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/threads/index.vue'),
+        name: 'Threads',
+        meta: { title: '对话线程管理', icon: 'component', affix: true }
+      }
+    ]
+  },
   // #endregion
 
   {
