@@ -132,6 +132,21 @@ export const constantRoutes: RouteRecordRaw[] = [
       }
     ]
   },
+
+  // 用户配置管理
+  {
+    path: '/user-configs',
+    component: Layout,
+    redirect: '/user-configs/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/user-config/index.vue'),
+        name: 'UserConfigs',
+        meta: { title: '用户配置管理', icon: 'component', affix: true }
+      }
+    ]
+  },
   // #endregion
 
   {
