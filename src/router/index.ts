@@ -147,6 +147,20 @@ export const constantRoutes: RouteRecordRaw[] = [
       }
     ]
   },
+  // 工作流管理
+  {
+    path: '/workflows',
+    component: Layout,
+    redirect: '/workflows/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/workflows/index.vue'),
+        name: 'Workflows',
+        meta: { title: '工作流管理', icon: 'component', affix: true }
+      }
+    ]
+  },
   // #endregion
 
   {

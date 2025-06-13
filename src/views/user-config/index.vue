@@ -205,33 +205,13 @@ import { debounce, isNumber } from 'lodash';
 import { defineComponent } from 'vue';
 import Pagination from '@/components/Pagination';
 import { formatDateTime } from '@/utils';
-import {
-  getPointsList,
-  createPoint,
-  getPointDetail,
-  updatePoint,
-  deletePoint
-} from '@/api/points';
-import {
-  getConfigsList,
-  createConfig,
-  getConfigDetail,
-  updateConfig,
-  patchConfig,
-  deleteConfig,
-  getSpecificConfig,
-  setSpecificConfig
-} from '@/api/configs';
 
 import {
   getUserConfigsList,
   createUserConfig,
   getUserConfigDetail,
   updateUserConfig,
-  patchUserConfig,
-  deleteUserConfig,
-  batchCreateUserConfigs,
-  batchUpdateUserConfigs
+  deleteUserConfig
 } from '@/api/user-configs';
 
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -327,6 +307,7 @@ export default defineComponent({
         .then((res) => {
           const data = res.data;
           this.list = data.results;
+          console.log(this.list)
           this.total = data.count;
         })
         .finally(() => {
@@ -335,13 +316,13 @@ export default defineComponent({
     },
     formatDateTime,
     handleDetail(row: any) {
-      getConfigDetail(row.id).then((res) => {
+      getUserConfigDetail(row.id).then((res) => {
         this.currentRow = res.data;
         this.dialogVisible = true;
       });
     },
     handleEdit(row) {
-      getConfigDetail(row.id).then((res) => {
+      getUserConfigDetail(row.id).then((res) => {
         this.editForm = res.data;
         this.editDialogVisible = true;
       });
@@ -356,7 +337,7 @@ export default defineComponent({
       this.addDialogVisible = true;
     },
     submitEdit() {
-      updateConfig(this.editForm.id, this.editForm)
+      updateUserConfig(this.editForm.id, this.editForm)
         .then(() => {
           ElMessage.success('保存成功');
           this.editDialogVisible = false;
@@ -367,7 +348,7 @@ export default defineComponent({
         });
     },
     submitAdd() {
-      createConfig(this.addForm)
+      createUserConfig(this.addForm)
         .then(() => {
           ElMessage.success('添加成功');
           this.addDialogVisible = false;
@@ -387,7 +368,7 @@ export default defineComponent({
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteConfig(row.id).then(() => {
+        deleteUserConfig(row.id).then(() => {
           ElMessage.success('删除成功');
           this.getList();
         });

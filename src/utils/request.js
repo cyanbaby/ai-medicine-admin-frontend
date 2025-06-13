@@ -57,28 +57,7 @@ service.interceptors.response.use(
 
     // if the custom code is not 20000, it is judged as an error.
     if (res.status !== 200 && res.status !== 201 && res.status !== 204) {
-      ElMessage({
-        message: res.message || 'Error',
-        type: 'error',
-        duration: 5 * 1000
-      });
-
-      // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-        // to re-login
-        ElMessageBox.confirm(
-          'You have been logged out, you can cancel to stay on this page, or log in again',
-          'Confirm logout',
-          {
-            confirmButtonText: 'Re-Login',
-            cancelButtonText: 'Cancel',
-            type: 'warning'
-          }
-        ).then(() => {
-          store.user().resetToken();
-          location.reload();
-        });
-      }
+      console.log('res', res);
 
       return Promise.reject(new Error(res.message || 'Error'));
     } else {
@@ -86,7 +65,13 @@ service.interceptors.response.use(
     }
   },
   (error) => {
-    console.log('err' + error); // for debug
+    console.log(error);
+    if (error.response.status === 401) {
+      // 401 未授权
+      // 跳转到登录页面
+      window.location.href = '/login';
+    }
+
     ElMessage({
       message: error.message,
       type: 'error',
