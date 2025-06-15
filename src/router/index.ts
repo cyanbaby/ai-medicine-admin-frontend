@@ -161,6 +161,19 @@ export const constantRoutes: RouteRecordRaw[] = [
       }
     ]
   },
+  {
+    path: '/prompts',
+    component: Layout,
+    redirect: '/prompts/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/prompts/index.vue'),
+        name: 'Prompts',
+        meta: { title: '提示词管理', icon: 'component', affix: true }
+      }
+    ]
+  },
   // #endregion
 
   {
