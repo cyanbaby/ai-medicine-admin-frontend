@@ -6,92 +6,126 @@
       </div>
     </div>
     <div :class="`app-body flex-1 overflow-hidden ${tableWrapOnlyClass}`">
-      <el-table v-loading="listLoading" class="w-full" :data="list" :height="height" border style="width: 100%">
-        <!-- 配置项键 Column -->
-        <el-table-column label="配置项键" width="180">
+      <el-table
+        v-loading="listLoading"
+        class="w-full"
+        :data="list"
+        :height="height"
+        border
+        style="width: 100%"
+      >
+        <!-- ID Column -->
+        <el-table-column label="ID">
           <template v-slot="scope">
-            <span>{{ scope.row.key }}</span>
+            <span>{{ scope.row.id }}</span>
           </template>
         </el-table-column>
 
-        <!-- 配置值 Column -->
-        <el-table-column label="配置值" width="180">
+        <!-- 标题 Column -->
+        <el-table-column label="标题">
           <template v-slot="scope">
-            <span>{{ scope.row.value }}</span>
+            <span>{{ scope.row.title }}</span>
           </template>
         </el-table-column>
 
-        <!-- 值类型 Column -->
-        <el-table-column label="值类型" width="120">
+        <!-- 目录 Column -->
+        <el-table-column label="目录">
           <template v-slot="scope">
-            <span>{{ valueTypeTextMap[scope.row.value_type] }}</span>
+            <span>{{ scope.row.directory_name }}</span>
           </template>
         </el-table-column>
 
-        <!-- 描述 Column -->
-        <el-table-column label="描述">
+        <!-- 标签 Column -->
+        <el-table-column label="标签">
           <template v-slot="scope">
-            <span>{{ scope.row.description }}</span>
+            <span>{{ scope.row.tags }}</span>
           </template>
         </el-table-column>
 
         <!-- 创建时间 Column -->
-        <el-table-column label="创建时间" width="180">
+        <el-table-column label="创建时间">
           <template v-slot="scope">
-            <span>{{ formatDateTime(scope.row.created_at) }}</span>
+            <span>{{ formatDateTime(scope.row.created) }}</span>
           </template>
         </el-table-column>
 
-        <!-- 更新时间 Column -->
-        <el-table-column label="更新时间" width="180">
+        <!-- 修改时间 Column -->
+        <el-table-column label="修改时间">
           <template v-slot="scope">
-            <span>{{ formatDateTime(scope.row.updated_at) }}</span>
+            <span>{{ formatDateTime(scope.row.modified) }}</span>
           </template>
         </el-table-column>
         <!-- Actions Column -->
-        <el-table-column align="center" fixed="right" label="操作" width="200px">
+        <el-table-column
+          align="center"
+          fixed="right"
+          label="操作"
+          width="200px"
+        >
           <template v-slot="scope">
-            <el-button type="text" size="small" @click="handleDetail(scope.row)">详情</el-button>
-            <el-button type="text" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button type="text" size="small" @click="handleDelete(scope.row)">删除</el-button>
+            <el-button type="text" size="small" @click="handleDetail(scope.row)"
+              >详情</el-button
+            >
+            <el-button type="text" size="small" @click="handleEdit(scope.row)"
+              >编辑</el-button
+            >
+            <el-button type="text" size="small" @click="handleDelete(scope.row)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
     </div>
 
     <div class="flex-shrink-0 overflow-hidden">
-      <pagination v-show="total > 0" class="pagination-wrapper" :total="total" v-model:page="listQuery.page"
-        v-model:limit="listQuery.limit" @pagination="getList" />
+      <pagination
+        v-show="total > 0"
+        class="pagination-wrapper"
+        :total="total"
+        v-model:page="listQuery.page"
+        v-model:limit="listQuery.limit"
+        @pagination="getList"
+      />
     </div>
 
     <!-- 积分详情弹窗 -->
-    <el-dialog title="详情" v-model="dialogVisible" width="620px" :before-close="handleClose">
+    <el-dialog
+      title="详情"
+      v-model="dialogVisible"
+      width="620px"
+      :before-close="handleClose"
+    >
       <div v-if="currentRow">
         <el-descriptions :column="2" border class="user-detail-descriptions">
           <el-descriptions-item label="配置键">{{
             currentRow.key
-            }}</el-descriptions-item>
+          }}</el-descriptions-item>
           <el-descriptions-item label="配置值">{{
             currentRow.value
-            }}</el-descriptions-item>
+          }}</el-descriptions-item>
           <el-descriptions-item label="值类型">{{
             valueTypeTextMap[currentRow.value_type]
-            }}</el-descriptions-item>
+          }}</el-descriptions-item>
           <el-descriptions-item label="描述">{{
             currentRow.description
-            }}</el-descriptions-item>
+          }}</el-descriptions-item>
           <el-descriptions-item label="创建时间">{{
             formatDateTime(currentRow.created_at)
-            }}</el-descriptions-item>
+          }}</el-descriptions-item>
           <el-descriptions-item label="更新时间">{{
             formatDateTime(currentRow.updated_at)
-            }}</el-descriptions-item>
+          }}</el-descriptions-item>
         </el-descriptions>
       </div>
     </el-dialog>
 
     <!-- 添加弹窗 -->
-    <el-dialog title="添加" v-model="addDialogVisible" width="620px" :before-close="() => (addDialogVisible = false)">
+    <el-dialog
+      title="添加"
+      v-model="addDialogVisible"
+      width="620px"
+      :before-close="() => (addDialogVisible = false)"
+    >
       <el-form :model="addForm" label-width="100px">
         <el-form-item label="标题">
           <el-input v-model="addForm.title" maxlength="100" show-word-limit />
@@ -116,7 +150,12 @@
     </el-dialog>
 
     <!-- 编辑弹窗 -->
-    <el-dialog title="编辑" v-model="editDialogVisible" width="620px" :before-close="() => (editDialogVisible = false)">
+    <el-dialog
+      title="编辑"
+      v-model="editDialogVisible"
+      width="620px"
+      :before-close="() => (editDialogVisible = false)"
+    >
       <el-form :model="editForm" label-width="100px">
         <el-form-item label="配置键">
           <el-input v-model="editForm.key" />
@@ -126,9 +165,17 @@
         </el-form-item>
         <el-form-item label="值类型">
           <!-- <el-input v-model="editForm.value_type" /> -->
-          <el-select v-model="editForm.value_type" placeholder="请选择值类型" filterable>
-            <el-option v-for="option in valueTypeOptions" :key="option.value" :label="option.label"
-              :value="option.value" />
+          <el-select
+            v-model="editForm.value_type"
+            placeholder="请选择值类型"
+            filterable
+          >
+            <el-option
+              v-for="option in valueTypeOptions"
+              :key="option.value"
+              :label="option.label"
+              :value="option.value"
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="描述">
@@ -155,10 +202,8 @@ import {
   createPrompt as createItem,
   getPromptById as getItemDetail,
   updatePrompt as updateItem,
-  deletePrompt as deleteItem,
+  deletePrompt as deleteItem
 } from '@/api/prompts';
-
-
 
 import { ElMessage, ElMessageBox } from 'element-plus';
 
@@ -185,11 +230,11 @@ export default defineComponent({
       editForm: {} as any,
       addDialogVisible: false,
       addForm: {
-        "title": "",  // 标题 (minLength: 1, maxLength: 100)
-        "content": "",  // 提示词内容 (minLength: 1)
-        "directory": 0,  // 所属目录 (integer)
-        "tags": "",  // 标签
-        "metadata": ""  // 元数据
+        title: '', // 标题 (minLength: 1, maxLength: 100)
+        content: '', // 提示词内容 (minLength: 1)
+        directory: 0, // 所属目录 (integer)
+        tags: '', // 标签
+        metadata: '' // 元数据
       } as any,
       valueTypeOptions: [
         { label: '字符串类型', value: 'string' },
@@ -275,11 +320,11 @@ export default defineComponent({
     },
     handleAdd() {
       this.addForm = {
-        "title": "",
-        "content": "",
-        "directory": 0,
-        "tags": "",
-        "metadata": ""
+        title: '',
+        content: '',
+        directory: 0,
+        tags: '',
+        metadata: ''
       };
       this.addDialogVisible = true;
     },
