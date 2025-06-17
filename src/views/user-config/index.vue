@@ -6,23 +6,30 @@
       </div>
     </div>
     <div :class="`app-body flex-1 overflow-hidden ${tableWrapOnlyClass}`">
-      <el-table v-loading="listLoading" class="w-full" :data="list" :height="height" border style="width: 100%">
+      <el-table
+        v-loading="listLoading"
+        class="w-full"
+        :data="list"
+        :height="height"
+        border
+        style="width: 100%"
+      >
         <!-- 配置项键 Column -->
-        <el-table-column label="配置项键" width="180">
+        <el-table-column label="配置项键">
           <template v-slot="scope">
             <span>{{ scope.row.key }}</span>
           </template>
         </el-table-column>
 
         <!-- 配置值 Column -->
-        <el-table-column label="配置值" width="180">
+        <el-table-column label="配置值">
           <template v-slot="scope">
             <span>{{ scope.row.value }}</span>
           </template>
         </el-table-column>
 
         <!-- 配置类别 Column -->
-        <el-table-column label="配置类别" width="120">
+        <el-table-column label="配置类别">
           <template v-slot="scope">
             <span>{{ scope.row.category_name }}</span>
           </template>
@@ -36,59 +43,102 @@
         </el-table-column> -->
 
         <!-- 是否启用 Column -->
-        <el-table-column label="是否启用" width="120">
+        <el-table-column label="是否启用">
           <template v-slot="scope">
             <span>{{ scope.row.is_active ? '是' : '否' }}</span>
           </template>
         </el-table-column>
 
         <!-- 创建时间 Column -->
-        <el-table-column label="创建时间" width="180">
+        <el-table-column label="创建时间">
           <template v-slot="scope">
             <span>{{ formatDateTime(scope.row.created) }}</span>
           </template>
         </el-table-column>
 
         <!-- 更新时间 Column -->
-        <el-table-column label="更新时间" width="180">
+        <el-table-column label="更新时间">
           <template v-slot="scope">
             <span>{{ formatDateTime(scope.row.modified) }}</span>
           </template>
         </el-table-column>
         <!-- Actions Column -->
-        <el-table-column align="center" fixed="right" label="操作" width="200px">
+        <el-table-column
+          align="center"
+          fixed="right"
+          label="操作"
+          width="200px"
+        >
           <template v-slot="scope">
-            <el-button type="text" size="small" @click="handleDetail(scope.row)">详情</el-button>
-            <el-button type="text" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button type="text" size="small" @click="handleDelete(scope.row)">删除</el-button>
+            <el-button type="text" size="small" @click="handleDetail(scope.row)"
+              >详情</el-button
+            >
+            <el-button type="text" size="small" @click="handleEdit(scope.row)"
+              >编辑</el-button
+            >
+            <el-button type="text" size="small" @click="handleDelete(scope.row)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
     </div>
 
     <div class="flex-shrink-0 overflow-hidden">
-      <pagination v-show="total > 0" class="pagination-wrapper" :total="total" v-model:page="listQuery.page"
-        v-model:limit="listQuery.limit" @pagination="getList" />
+      <pagination
+        v-show="total > 0"
+        class="pagination-wrapper"
+        :total="total"
+        v-model:page="listQuery.page"
+        v-model:limit="listQuery.limit"
+        @pagination="getList"
+      />
     </div>
 
     <!-- 积分详情弹窗 -->
-    <el-dialog title="详情" v-model="dialogVisible" width="620px" :before-close="handleClose">
+    <el-dialog
+      title="详情"
+      v-model="dialogVisible"
+      width="620px"
+      :before-close="handleClose"
+    >
       <div v-if="currentRow">
         <el-descriptions :column="2" border class="user-detail-descriptions">
-          <el-descriptions-item label="ID">{{ currentRow.id }}</el-descriptions-item>
-          <el-descriptions-item label="配置类别">{{ currentRow.category_name }}</el-descriptions-item>
-          <el-descriptions-item label="配置键">{{ currentRow.key }}</el-descriptions-item>
-          <el-descriptions-item label="配置值">{{ currentRow.value }}</el-descriptions-item>
-          <el-descriptions-item label="完整键名">{{ currentRow.full_key }}</el-descriptions-item>
-          <el-descriptions-item label="是否启用">{{ currentRow.is_active ? '是' : '否' }}</el-descriptions-item>
-          <el-descriptions-item label="创建时间">{{ formatDateTime(currentRow.created) }}</el-descriptions-item>
-          <el-descriptions-item label="更新时间">{{ formatDateTime(currentRow.modified) }}</el-descriptions-item>
+          <el-descriptions-item label="ID">{{
+            currentRow.id
+          }}</el-descriptions-item>
+          <el-descriptions-item label="配置类别">{{
+            currentRow.category_name
+          }}</el-descriptions-item>
+          <el-descriptions-item label="配置键">{{
+            currentRow.key
+          }}</el-descriptions-item>
+          <el-descriptions-item label="配置值">{{
+            currentRow.value
+          }}</el-descriptions-item>
+          <el-descriptions-item label="完整键名">{{
+            currentRow.full_key
+          }}</el-descriptions-item>
+          <el-descriptions-item label="是否启用">{{
+            currentRow.is_active ? '是' : '否'
+          }}</el-descriptions-item>
+          <el-descriptions-item label="创建时间">{{
+            formatDateTime(currentRow.created)
+          }}</el-descriptions-item>
+          <el-descriptions-item label="更新时间">{{
+            formatDateTime(currentRow.modified)
+          }}</el-descriptions-item>
         </el-descriptions>
       </div>
     </el-dialog>
 
     <!-- 添加弹窗 -->
-    <el-dialog title="添加" v-model="addDialogVisible" width="620px" :before-close="() => (addDialogVisible = false)">
+    <el-dialog
+      title="添加"
+      v-model="addDialogVisible"
+      width="620px"
+      :before-close="() => (addDialogVisible = false)"
+    >
       <el-form :model="addForm" label-width="100px">
         <el-form-item label="配置类别">
           <el-select v-model="addForm.category" placeholder="请选择配置类别">
@@ -113,7 +163,12 @@
     </el-dialog>
 
     <!-- 编辑弹窗 -->
-    <el-dialog title="编辑" v-model="editDialogVisible" width="620px" :before-close="() => (editDialogVisible = false)">
+    <el-dialog
+      title="编辑"
+      v-model="editDialogVisible"
+      width="620px"
+      :before-close="() => (editDialogVisible = false)"
+    >
       <el-form :model="editForm" label-width="100px">
         <el-form-item label="配置类别">
           <el-select v-model="editForm.category" placeholder="请选择配置类别">
@@ -155,10 +210,7 @@ import {
   deleteUserConfig as deleteConfig
 } from '@/api/user-configs';
 
-
 // import { getUserConfigsList, createUserConfig, getUserConfigDetail, updateUserConfig, patchUserConfig, deleteUserConfig, batchCreateUserConfigs, batchUpdateUserConfigs } from '@/api/user-configs';
-
-
 
 import { ElMessage, ElMessageBox } from 'element-plus';
 
@@ -185,10 +237,10 @@ export default defineComponent({
       editForm: {} as any,
       addDialogVisible: false,
       addForm: {
-        "category": 1,  // 配置类别
-        "key": "",  // 配置键名
-        "value": "",  // 配置值
-        "is_active": true  // 是否启用
+        category: 1, // 配置类别
+        key: '', // 配置键名
+        value: '', // 配置值
+        is_active: true // 是否启用
       } as any,
       valueTypeOptions: [
         { label: '字符串类型', value: 'string' },

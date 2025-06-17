@@ -15,28 +15,28 @@
         style="width: 100%"
       >
         <!-- ID Column -->
-        <el-table-column label="ID" width="80">
+        <el-table-column label="ID">
           <template v-slot="scope">
             <span>{{ scope.row.id }}</span>
           </template>
         </el-table-column>
 
         <!-- 标题 Column -->
-        <el-table-column label="标题" width="180">
+        <el-table-column label="标题">
           <template v-slot="scope">
             <span>{{ scope.row.title }}</span>
           </template>
         </el-table-column>
 
         <!-- 用户名 Column -->
-        <el-table-column label="用户名" width="120">
+        <el-table-column label="用户名">
           <template v-slot="scope">
             <span>{{ scope.row.user_name }}</span>
           </template>
         </el-table-column>
 
         <!-- 模型信息 Column -->
-        <el-table-column label="模型" width="180">
+        <el-table-column label="模型">
           <template v-slot="scope">
             <div class="flex items-center">
               <img
@@ -50,14 +50,14 @@
         </el-table-column>
 
         <!-- 消息数量 Column -->
-        <el-table-column label="消息数" width="100">
+        <el-table-column label="消息数">
           <template v-slot="scope">
             <span>{{ scope.row.message_count }}</span>
           </template>
         </el-table-column>
 
         <!-- 状态 Column -->
-        <el-table-column label="状态" width="100">
+        <el-table-column label="状态">
           <template v-slot="scope">
             <el-tag :type="scope.row.status === 'active' ? 'success' : 'info'">
               {{ scope.row.status === 'active' ? '活跃' : '已归档' }}
@@ -66,14 +66,14 @@
         </el-table-column>
 
         <!-- 最后消息时间 Column -->
-        <el-table-column label="最后消息" width="180">
+        <el-table-column label="最后消息">
           <template v-slot="scope">
             <span>{{ formatDateTime(scope.row.last_message_at) }}</span>
           </template>
         </el-table-column>
 
         <!-- 创建时间 Column -->
-        <el-table-column label="创建时间" width="180">
+        <el-table-column label="创建时间">
           <template v-slot="scope">
             <span>{{ formatDateTime(scope.row.created) }}</span>
           </template>

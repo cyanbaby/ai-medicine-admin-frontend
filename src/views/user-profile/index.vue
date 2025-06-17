@@ -98,7 +98,7 @@
         </el-table-column>
 
         <!-- 创建时间 Column -->
-        <el-table-column width="180px" label="创建时间">
+        <el-table-column label="创建时间">
           <template v-slot="scope">
             <span>{{ formatDateTime(scope.row.created_at) }}</span>
           </template>
