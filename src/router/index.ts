@@ -60,7 +60,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index.vue'),
         name: 'Dashboard',
-        meta: { title: '首页', icon: 'component', affix: true }
+        meta: { title: '首页', icon: 'home', affix: true }
       }
     ]
   },
@@ -74,7 +74,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: 'index',
         component: () => import('@/views/user-profile/index.vue'),
         name: 'UserProfile',
-        meta: { title: '用户资料管理', icon: 'component', affix: true }
+        meta: { title: '用户资料管理', icon: 'userprofile', affix: true }
       }
     ]
   },
@@ -87,7 +87,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: 'index',
         component: () => import('@/views/points-management/index.vue'),
         name: 'PointsManagement',
-        meta: { title: '积分管理', icon: 'component', affix: true }
+        meta: { title: '积分管理', icon: 'integral', affix: true }
       }
     ]
   },
@@ -100,7 +100,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: 'index',
         component: () => import('@/views/system-config/index.vue'),
         name: 'SystemConfig',
-        meta: { title: '系统配置管理', icon: 'component', affix: true }
+        meta: { title: '系统配置管理', icon: 'sysconfig', affix: true }
       }
     ]
   },
@@ -114,7 +114,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: 'index',
         component: () => import('@/views/admin-models/index.vue'),
         name: 'AdminModels',
-        meta: { title: '模型管理', icon: 'component', affix: true }
+        meta: { title: '模型管理', icon: 'model', affix: true }
       }
     ]
   },
@@ -128,7 +128,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: 'index',
         component: () => import('@/views/threads/index.vue'),
         name: 'Threads',
-        meta: { title: '对话线程管理', icon: 'component', affix: true }
+        meta: { title: '对话线程管理', icon: 'dialoguethread', affix: true }
       }
     ]
   },
@@ -143,7 +143,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: 'index',
         component: () => import('@/views/user-config/index.vue'),
         name: 'UserConfigs',
-        meta: { title: '用户配置管理', icon: 'component', affix: true }
+        meta: { title: '用户配置管理', icon: 'usermanage', affix: true }
       }
     ]
   },
@@ -157,7 +157,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: 'index',
         component: () => import('@/views/workflows/index.vue'),
         name: 'Workflows',
-        meta: { title: '工作流管理', icon: 'component', affix: true }
+        meta: { title: '工作流管理', icon: 'workflow', affix: true }
       }
     ]
   },
@@ -170,7 +170,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: 'index',
         component: () => import('@/views/prompts/index.vue'),
         name: 'Prompts',
-        meta: { title: '提示词管理', icon: 'component', affix: true }
+        meta: { title: '提示词管理', icon: 'promptwords', affix: true }
       }
     ]
   },

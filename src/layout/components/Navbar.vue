@@ -1,7 +1,11 @@
 <template>
   <div class="navbar">
-    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container"
-      @toggleClick="toggleSidebar" />
+    <hamburger
+      id="hamburger-container"
+      :is-active="sidebar.opened"
+      class="hamburger-container"
+      @toggleClick="toggleSidebar"
+    />
 
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
@@ -19,9 +23,12 @@
 
       </template> -->
 
-      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+      <el-dropdown
+        class="avatar-container right-menu-item hover-effect"
+        trigger="click"
+      >
         <div class="avatar-wrapper">
-          <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar">
+          <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar" />
           <el-icon class="el-icon-caret-bottom" size="small">
             <CaretBottom />
           </el-icon>
@@ -32,7 +39,7 @@
               <el-dropdown-item>个人中心</el-dropdown-item>
             </router-link>
             <el-dropdown-item divided @click="logout">
-              <span style="display:block;">退出登录</span>
+              <span style="display: block">退出登录</span>
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -64,13 +71,8 @@ export default defineComponent({
     CaretBottom
   },
   computed: {
-    ...mapState(store.app, [
-      'sidebar',
-      'device'
-    ]),
-    ...mapState(store.user, [
-      'avatar'
-    ])
+    ...mapState(store.app, ['sidebar', 'device']),
+    ...mapState(store.user, ['avatar'])
   },
   methods: {
     toggleSidebar() {
@@ -86,22 +88,26 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .navbar {
+  position: relative;
   height: 50px;
   overflow: hidden;
-  position: relative;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
+  // background: #fff;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+  border-left: 1px solid rgba(5, 5, 5, 0.06);
+
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 
   .hamburger-container {
-    line-height: 46px;
-    height: 100%;
     float: left;
+    height: 100%;
+    line-height: 46px;
     cursor: pointer;
-    transition: background .3s;
+    transition: background 0.3s;
     -webkit-tap-highlight-color: transparent;
 
     &:hover {
-      background: rgba(0, 0, 0, .025)
+      background: rgba(0, 0, 0, 0.025);
     }
   }
 
@@ -125,19 +131,19 @@ export default defineComponent({
 
     .right-menu-item {
       display: inline-block;
-      padding: 0 8px;
       height: 100%;
-      line-height: 50px;
-      font-size: 18px;
+      padding: 0 8px;
       color: #5a5e66;
+      font-size: 18px;
+      line-height: 50px;
       vertical-align: text-bottom;
 
       &.hover-effect {
         cursor: pointer;
-        transition: background .3s;
+        transition: background 0.3s;
 
         &:hover {
-          background: rgba(0, 0, 0, .025)
+          background: rgba(0, 0, 0, 0.025);
         }
       }
     }
@@ -146,23 +152,23 @@ export default defineComponent({
       margin-right: 30px;
 
       .avatar-wrapper {
-        margin-top: 5px;
         position: relative;
         height: 45px;
+        margin-top: 5px;
 
         .user-avatar {
-          cursor: pointer;
           width: 40px;
           height: 40px;
           border-radius: 10px;
+          cursor: pointer;
         }
 
         .el-icon-caret-bottom {
-          cursor: pointer;
           position: absolute;
-          right: -20px;
           top: 25px;
+          right: -20px;
           font-size: 12px;
+          cursor: pointer;
         }
       }
     }

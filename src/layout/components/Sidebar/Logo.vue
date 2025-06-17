@@ -1,11 +1,11 @@
 <template>
   <div class="sidebar-logo-container" :class="{ 'collapse': collapse }">
     <transition name="sidebarLogoFade">
-      <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
+      <router-link v-if="collapse" key="collapse" class="sidebar-logo-link flex items-center justify-center" to="/">
         <img v-if="logo" :src="logo" class="sidebar-logo">
         <h1 v-else class="sidebar-title">{{ title }} </h1>
       </router-link>
-      <router-link v-else key="expand" class="sidebar-logo-link" to="/">
+      <router-link v-else key="expand" class="sidebar-logo-link flex items-center justify-center" to="/">
         <img v-if="logo" :src="logo" class="sidebar-logo">
         <h1 class="sidebar-title">{{ title }} </h1>
       </router-link>
@@ -26,8 +26,8 @@ export default defineComponent({
   },
   data() {
     return {
-      title: 'Vue3 Element Admin',
-      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
+      title: 'RAA',
+      logo: 'https://remix-antd-admin.vercel.app/remix.svg'
     };
   }
 });
@@ -48,13 +48,18 @@ export default defineComponent({
   width: 100%;
   height: 50px;
   line-height: 50px;
-  background: #2b2f3a;
+  // background: #2b2f3a;
+  background-color: #f5f5f5;
+
   text-align: center;
   overflow: hidden;
 
   & .sidebar-logo-link {
     height: 100%;
     width: 100%;
+    h1 {
+      color: rgba(0, 0, 0, 0.88) !important;
+    }
 
     & .sidebar-logo {
       width: 32px;

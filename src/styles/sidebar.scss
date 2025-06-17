@@ -1,28 +1,30 @@
 #app {
 
   .main-container {
-    min-height: 100%;
-    transition: margin-left .28s;
-    margin-left: var(--side-bar-width);
     position: relative;
+    min-height: 100%;
+    margin-left: var(--side-bar-width);
+    transition: margin-left 0.28s;
   }
 
   .sidebar-container {
-    transition: width 0.28s;
-    width: var(--side-bar-width) !important;
-    background-color: var(--menu-bg);
-    height: 100%;
     position: fixed;
-    font-size: 0px;
     top: 0;
     bottom: 0;
     left: 0;
     z-index: 1001;
+    width: var(--side-bar-width) !important;
+    height: 100%;
     overflow: hidden;
+    font-size: 0px;
+    // background-color: var(--menu-bg);
+    background-color: #f5f5f5;
+    transition: width 0.28s;
 
     // reset element-ui css
     .horizontal-collapse-transition {
-      transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
+      transition: 0s width ease-in-out, 0s padding-left ease-in-out,
+        0s padding-right ease-in-out;
     }
 
     .scrollbar-wrapper {
@@ -39,6 +41,7 @@
 
     &.has-logo {
       .el-scrollbar {
+        border-right: 1px solid rgba(5, 5, 5, 0.06);
         height: calc(100% - 50px);
       }
     }
@@ -69,9 +72,13 @@
     }
 
     .el-menu {
-      border: none;
-      height: 100%;
       width: 100% !important;
+      height: 100%;
+      border: none;
+      background-color: #f5f5f5;
+      // &:hover {
+      //   background-color: rgba(0, 0, 0, 0.15) !important;
+      // }
     }
 
     // menu hover
@@ -82,11 +89,11 @@
       }
     }
 
-    .is-active>.el-sub-menu__title {
+    .is-active > .el-sub-menu__title {
       color: var(--sub-menu-active-text) !important;
     }
 
-    & .nest-menu .el-sub-menu>.el-sub-menu__title,
+    & .nest-menu .el-sub-menu > .el-sub-menu__title,
     & .el-sub-menu .el-menu-item {
       min-width: var(--side-bar-width) !important;
       background-color: var(--sub-menu-bg) !important;
@@ -107,8 +114,8 @@
     }
 
     .submenu-title-noDropdown {
-      padding: 0 !important;
       position: relative;
+      padding: 0 !important;
       .text-one-added {
         display: none;
       }
@@ -129,7 +136,7 @@
     .el-sub-menu {
       overflow: hidden;
 
-      &>.el-sub-menu__title {
+      & > .el-sub-menu__title {
         padding: 0 !important;
 
         .svg-icon {
@@ -148,13 +155,13 @@
 
     .el-menu--collapse {
       .el-sub-menu {
-        &>.el-sub-menu__title {
-          &>span {
-            height: 0;
+        & > .el-sub-menu__title {
+          & > span {
+            display: inline-block;
             width: 0;
+            height: 0;
             overflow: hidden;
             visibility: hidden;
-            display: inline-block;
           }
         }
       }
@@ -172,21 +179,20 @@
     }
 
     .sidebar-container {
-      transition: transform .28s;
       width: var(--side-bar-width) !important;
+      transition: transform 0.28s;
     }
 
     &.hideSidebar {
       .sidebar-container {
-        pointer-events: none;
-        transition-duration: 0.3s;
         transform: translate3d(calc(0% - var(--side-bar-width)), 0, 0);
+        transition-duration: 0.3s;
+        pointer-events: none;
       }
     }
   }
 
   .withoutAnimation {
-
     .main-container,
     .sidebar-container {
       transition: none;
@@ -196,7 +202,7 @@
 
 // when menu collapsed
 .el-menu--vertical {
-  &>.el-menu {
+  & > .el-menu {
     .svg-icon {
       margin-right: 16px;
     }
@@ -207,7 +213,7 @@
     }
   }
 
-  .nest-menu .el-sub-menu>.el-sub-menu__title,
+  .nest-menu .el-sub-menu > .el-sub-menu__title,
   .el-menu-item {
     .text {
       overflow: hidden;
@@ -217,10 +223,12 @@
       // you can use var(--sub-menu-hover)
       background-color: var(--menu-hover) !important;
     }
+
+    color: rgba(0, 0, 0, 0.65);
   }
 
   // the scroll bar appears when the subMenu is too long
-  >.el-menu--popup {
+  > .el-menu--popup {
     max-height: 100vh;
     overflow-y: auto;
 
@@ -237,4 +245,8 @@
       border-radius: 20px;
     }
   }
+}
+
+#app .sidebar-container .submenu-title-noDropdown:hover, #app .sidebar-container .el-sub-menu__title:hover {
+  background-color: rgba(0, 0, 0, 0.03) !important;
 }
