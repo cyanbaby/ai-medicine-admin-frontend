@@ -6,9 +6,9 @@ import { setupStore } from './store';
 
 import '@/styles/index.scss';
 // tailwindcss
-import "./styles/tailwind.css";
+import './styles/tailwind.css';
 
-import 'element-plus/theme-chalk/src/message-box.scss'
+import 'element-plus/theme-chalk/src/message-box.scss';
 
 import SvgIcon from './icons'; // icon
 import './permission'; // permission control

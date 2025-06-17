@@ -246,3 +246,10 @@ th.el-table__cell {
     padding: 10px 0 !important;
   }
 }
+
+:root {
+  --el-color-primary: #1677ff;
+  --el-color-primary-dark-2: #0958d9;
+  --el-color-primary-light-3: #4096ff;
+  --el-button-hover-border-color: #0958d9;
+}
