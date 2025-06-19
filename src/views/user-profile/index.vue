@@ -278,14 +278,13 @@
 import { nanoid } from 'nanoid';
 import { debounce, isNumber } from 'lodash';
 import {
-  getUserProfileList,
-  getUserProfileDetail,
-  updateUserProfile
+  getUserProfileList as getList,
+  getUserProfileDetail as getDeital,
+  updateUserProfile as updateItem
 } from '@/api/profile';
 import { defineComponent } from 'vue';
 import Pagination from '@/components/Pagination'; // Secondary package based on el-pagination
 import { formatDateTime } from '@/utils';
-import { ElMessage } from 'element-plus';
 
 export default defineComponent({
   name: 'UserProfile',
@@ -363,7 +362,7 @@ export default defineComponent({
       });
     },
     getList() {
-      getUserProfileList({
+      getList({
         page: this.listQuery.page,
         pageSize: this.listQuery.limit
       })
@@ -388,13 +387,13 @@ export default defineComponent({
       return statusMap[status];
     },
     handleDetail(user: any) {
-      getUserProfileDetail(user.user_id).then((res) => {
+      getDeital(user.user_id).then((res) => {
         this.currentUser = res.data;
         this.dialogVisible = true;
       });
     },
     handleEdit(row) {
-      getUserProfileDetail(row.user_id).then((res) => {
+      getDeital(row.user_id).then((res) => {
         console.log(res.data);
         this.editForm = res.data;
         this.editDialogVisible = true;
@@ -402,8 +401,14 @@ export default defineComponent({
     },
     async submitEdit() {
       try {
-        await updateUserProfile(this.editForm.user_id, this.editForm);
-        ElMessage.success('修改成功');
+        await updateItem(this.editForm.user_id, this.editForm);
+        ElNotification({
+          title: 'Success',
+          message: '修改成功',
+          type: 'success',
+          duration: 2000
+        });
+
         this.editDialogVisible = false;
         this.getList(); // 重新拉取数据
       } catch (error) {

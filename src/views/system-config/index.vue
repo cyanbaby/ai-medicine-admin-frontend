@@ -217,22 +217,13 @@ import { debounce, isNumber } from 'lodash';
 import { defineComponent } from 'vue';
 import Pagination from '@/components/Pagination';
 import { formatDateTime } from '@/utils';
+
 import {
-  getPointsList,
-  createPoint,
-  getPointDetail,
-  updatePoint,
-  deletePoint
-} from '@/api/points';
-import {
-  getConfigsList,
-  createConfig,
-  getConfigDetail,
-  updateConfig,
-  patchConfig,
-  deleteConfig,
-  getSpecificConfig,
-  setSpecificConfig
+  getConfigsList as getList,
+  createConfig as addItem,
+  getConfigDetail as getDeital,
+  updateConfig as updateItem,
+  deleteConfig as deleteItem
 } from '@/api/configs';
 
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -321,7 +312,7 @@ export default defineComponent({
       });
     },
     getList() {
-      getConfigsList({
+      getList({
         page: this.listQuery.page,
         pageSize: this.listQuery.limit
       })
@@ -336,13 +327,13 @@ export default defineComponent({
     },
     formatDateTime,
     handleDetail(row: any) {
-      getConfigDetail(row.id).then((res) => {
+      getDeital(row.id).then((res) => {
         this.currentRow = res.data;
         this.dialogVisible = true;
       });
     },
     handleEdit(row) {
-      getConfigDetail(row.id).then((res) => {
+      getDeital(row.id).then((res) => {
         this.editForm = res.data;
         this.editDialogVisible = true;
       });
@@ -357,9 +348,14 @@ export default defineComponent({
       this.addDialogVisible = true;
     },
     submitEdit() {
-      updateConfig(this.editForm.id, this.editForm)
+      updateItem(this.editForm.id, this.editForm)
         .then(() => {
-          ElMessage.success('保存成功');
+          ElNotification({
+            title: 'Success',
+            message: '保存成功',
+            type: 'success',
+            duration: 2000
+          });
           this.editDialogVisible = false;
           this.getList();
         })
@@ -368,9 +364,14 @@ export default defineComponent({
         });
     },
     submitAdd() {
-      createConfig(this.addForm)
+      addItem(this.addForm)
         .then(() => {
-          ElMessage.success('添加成功');
+          ElNotification({
+            title: 'Success',
+            message: '添加成功',
+            type: 'success',
+            duration: 2000
+          });
           this.addDialogVisible = false;
           this.getList();
         })
@@ -388,8 +389,13 @@ export default defineComponent({
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteConfig(row.id).then(() => {
-          ElMessage.success('删除成功');
+        deleteItem(row.id).then(() => {
+          ElNotification({
+            title: 'Success',
+            message: '删除成功',
+            type: 'success',
+            duration: 2000
+          });
           this.getList();
         });
       });

@@ -272,11 +272,11 @@ import Pagination from '@/components/Pagination';
 import { formatDateTime } from '@/utils';
 import { getUserProfileList } from '@/api/profile';
 import {
-  getPointsList,
-  createPoint,
-  getPointDetail,
-  updatePoint,
-  deletePoint,
+  getPointsList as getList,
+  createPoint as addItem,
+  getPointDetail as getDetail,
+  updatePoint as updateItem,
+  deletePoint as deleteItem,
   adjustPoints
 } from '@/api/points';
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -377,7 +377,7 @@ export default defineComponent({
       });
     },
     getList() {
-      getPointsList({
+      getList({
         page: this.listQuery.page,
         pageSize: this.listQuery.limit
       })
@@ -392,13 +392,13 @@ export default defineComponent({
     },
     formatDateTime,
     handleDetail(row: any) {
-      getPointDetail(row.id).then((res) => {
+      getDetail(row.id).then((res) => {
         this.currentRow = res.data;
         this.dialogVisible = true;
       });
     },
     handleEdit(row) {
-      getPointDetail(row.id).then((res) => {
+      getDetail(row.id).then((res) => {
         this.editForm = res.data;
         this.editDialogVisible = true;
       });
@@ -413,9 +413,14 @@ export default defineComponent({
       this.addDialogVisible = true;
     },
     submitEdit() {
-      updatePoint(this.editForm.id, this.editForm)
+      updateItem(this.editForm.id, this.editForm)
         .then(() => {
-          ElMessage.success('保存成功');
+          ElNotification({
+            title: 'Success',
+            message: '保存成功',
+            type: 'success',
+            duration: 2000
+          });
           this.editDialogVisible = false;
           this.getList();
         })
@@ -424,9 +429,14 @@ export default defineComponent({
         });
     },
     submitAdd() {
-      createPoint(this.addForm)
+      addItem(this.addForm)
         .then(() => {
-          ElMessage.success('添加成功');
+          ElNotification({
+            title: 'Success',
+            message: '添加成功',
+            type: 'success',
+            duration: 2000
+          });
           this.addDialogVisible = false;
           this.getList();
         })
@@ -444,8 +454,13 @@ export default defineComponent({
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deletePoint(row.id).then(() => {
-          ElMessage.success('删除成功');
+        deleteItem(row.id).then(() => {
+          ElNotification({
+            title: 'Success',
+            message: '删除成功',
+            type: 'success',
+            duration: 2000
+          });
           this.getList();
         });
       });
@@ -463,15 +478,16 @@ export default defineComponent({
       });
     },
     submitAdjust() {
-      adjustPoints(this.adjustForm)
-        .then(() => {
-          ElMessage.success('积分调整成功');
-          this.adjustDialogVisible = false;
-          this.getList();
-        })
-        .catch(() => {
-          ElMessage.error('积分调整失败');
+      adjustPoints(this.adjustForm).then(() => {
+        ElNotification({
+          title: 'Success',
+          message: '积分调整成功',
+          type: 'success',
+          duration: 2000
         });
+        this.adjustDialogVisible = false;
+        this.getList();
+      });
     }
   }
 });

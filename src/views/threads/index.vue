@@ -297,12 +297,12 @@ import { defineComponent } from 'vue';
 import Pagination from '@/components/Pagination';
 import { formatDateTime } from '@/utils';
 import {
-  getThreadsList,
-  createThread,
-  getThreadDetail,
-  updateThread,
+  getThreadsList as getList,
+  createThread as addItem,
+  getThreadDetail as getDetail,
+  deleteThread as deleteItem,
+  updateThread as updateItem,
   patchThread,
-  deleteThread,
   archiveThread,
   restoreThread,
   softDeleteThread,
@@ -430,7 +430,7 @@ export default defineComponent({
       });
     },
     getList() {
-      getThreadsList({
+      getList({
         page: this.listQuery.page,
         pageSize: this.listQuery.limit
       })
@@ -445,13 +445,13 @@ export default defineComponent({
     },
     formatDateTime,
     handleDetail(row: any) {
-      getThreadDetail(row.id).then((res) => {
+      getDetail(row.id).then((res) => {
         this.currentRow = res.data;
         this.dialogVisible = true;
       });
     },
     handleEdit(row) {
-      getThreadDetail(row.id).then((res) => {
+      getDetail(row.id).then((res) => {
         this.editForm = res.data;
         this.editDialogVisible = true;
       });
@@ -478,7 +478,7 @@ export default defineComponent({
       this.addDialogVisible = true;
     },
     submitEdit() {
-      updateModel(this.editForm.id, this.editForm)
+      updateItem(this.editForm.id, this.editForm)
         .then(() => {
           ElMessage.success('保存成功');
           this.editDialogVisible = false;
@@ -489,7 +489,7 @@ export default defineComponent({
         });
     },
     submitAdd() {
-      createThread(this.addForm)
+      addItem(this.addForm)
         .then(() => {
           ElMessage.success('添加成功');
           this.addDialogVisible = false;
@@ -509,7 +509,7 @@ export default defineComponent({
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteThread(row.id).then(() => {
+        deleteItem(row.id).then(() => {
           ElMessage.success('删除成功');
           this.getList();
         });
