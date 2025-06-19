@@ -30,7 +30,7 @@
         <!-- 值类型 Column -->
         <el-table-column label="值类型" width="120">
           <template v-slot="scope">
-            <span>{{ valueTypeTextMap[scope.row.value_type] }}</span>
+            <el-tag>{{ valueTypeTextMap[scope.row.value_type] }}</el-tag>
           </template>
         </el-table-column>
 

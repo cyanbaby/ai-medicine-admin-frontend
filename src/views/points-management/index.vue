@@ -41,9 +41,9 @@
         <!-- 积分原因 Column -->
         <el-table-column width="150px" label="积分原因">
           <template v-slot="scope">
-            <span>{{
-              reasonTextMap[scope.row.reason] || scope.row.reason
-            }}</span>
+            <el-tag>
+              {{ reasonTextMap[scope.row.reason] || scope.row.reason }}
+            </el-tag>
           </template>
         </el-table-column>
 

@@ -14,15 +14,11 @@
         style="width: 100%"
       >
         <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="name" label="工作流名称" min-width="120" />
-        <el-table-column prop="creator_name" label="创建者" width="100" />
-        <el-table-column prop="template_name" label="模板名称" width="120" />
-        <el-table-column
-          prop="execution_count"
-          label="执行次数"
-          width="100"
-        />
-        <el-table-column prop="status" label="状态" width="100" >
+        <el-table-column prop="name" label="工作流名称" />
+        <el-table-column prop="creator_name" label="创建者" />
+        <el-table-column prop="template_name" label="模板名称" />
+        <el-table-column prop="execution_count" label="执行次数" />
+        <el-table-column prop="status" label="状态">
           <template #default="scope">
             <el-tag
               :type="
@@ -45,17 +41,17 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="created" label="创建时间" width="160">
+        <el-table-column prop="created" label="创建时间">
           <template #default="scope">
             {{ formatDateTime(scope.row.created) }}
           </template>
         </el-table-column>
-        <el-table-column prop="modified" label="修改时间" width="160">
+        <el-table-column prop="modified" label="修改时间">
           <template #default="scope">
             {{ formatDateTime(scope.row.modified) }}
           </template>
         </el-table-column>
-        <el-table-column prop="last_execution" label="上次执行" width="160">
+        <el-table-column prop="last_execution" label="上次执行">
           <template #default="scope">
             {{
               scope.row.last_execution
@@ -64,16 +60,8 @@
             }}
           </template>
         </el-table-column>
-        <el-table-column
-          prop="instance_count"
-          label="实例数量"
-          width="100"
-        />
-        <el-table-column
-          prop="is_template"
-          label="是否模板"
-          width="100"
-        >
+        <el-table-column prop="instance_count" label="实例数量" />
+        <el-table-column prop="is_template" label="是否模板">
           <template #default="scope">
             <el-tag :type="scope.row.is_template ? 'success' : 'info'">
               {{ scope.row.is_template ? '是' : '否' }}
@@ -82,11 +70,8 @@
         </el-table-column>
 
         <!-- Actions Column -->
-        <el-table-column
-          fixed="right"
-          label="操作"
-          width="325px"
-        >
+        <!-- width="325px" -->
+        <el-table-column fixed="right" label="操作" width="200px">
           <template v-slot="scope">
             <el-button
               type="primary"

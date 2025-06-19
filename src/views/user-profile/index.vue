@@ -43,14 +43,18 @@
         <!-- 是否为工作人员 Column -->
         <el-table-column width="130px" label="是否为工作人员">
           <template v-slot="scope">
-            <span>{{ scope.row.is_staff ? '是' : '否' }}</span>
+            <el-tag :type="scope.row.is_staff ? 'success' : 'info'">
+              {{ scope.row.is_staff ? '是' : '否' }}
+            </el-tag>
           </template>
         </el-table-column>
 
         <!-- 是否为超级管理员 Column -->
         <el-table-column width="150px" label="是否为超级管理员">
           <template v-slot="scope">
-            <span>{{ scope.row.is_superuser ? '是' : '否' }}</span>
+            <el-tag :type="scope.row.is_superuser ? 'success' : 'info'">
+              {{ scope.row.is_superuser ? '是' : '否' }}
+            </el-tag>
           </template>
         </el-table-column>
 
@@ -71,7 +75,9 @@
         <!-- 邮箱是否已验证 Column -->
         <el-table-column width="150px" label="邮箱是否已验证">
           <template v-slot="scope">
-            <span>{{ scope.row.is_email_verified ? '是' : '否' }}</span>
+            <el-tag :type="scope.row.is_email_verified ? 'success' : 'info'">
+              {{ scope.row.is_email_verified ? '是' : '否' }}
+            </el-tag>
           </template>
         </el-table-column>
 
@@ -85,14 +91,18 @@
         <!-- 是否为高级用户 Column -->
         <el-table-column width="150px" label="是否为高级用户">
           <template v-slot="scope">
-            <span>{{ scope.row.is_premium ? '是' : '否' }}</span>
+            <el-tag :type="scope.row.is_premium ? 'success' : 'info'">
+              {{ scope.row.is_premium ? '是' : '否' }}
+            </el-tag>
           </template>
         </el-table-column>
 
         <!-- 是否为企业用户 Column -->
         <el-table-column width="150px" label="是否为企业用户">
           <template v-slot="scope">
-            <span>{{ scope.row.is_enterprise ? '是' : '否' }}</span>
+            <el-tag :type="scope.row.is_enterprise ? 'success' : 'info'">
+              {{ scope.row.is_enterprise ? '是' : '否' }}
+            </el-tag>
           </template>
         </el-table-column>
 
