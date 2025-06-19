@@ -7,8 +7,8 @@ export default defineStore({
   id: 'settings',
   state: () => ({
     theme: '#1890ff',
-    // showSettings: showSettings,
-    showSettings: false,
+    showSettings: showSettings,
+    // showSettings: false,
     tagsView: tagsView,
     fixedHeader: fixedHeader,
     sidebarLogo: sidebarLogo,

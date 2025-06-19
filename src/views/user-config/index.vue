@@ -11,7 +11,6 @@
         class="w-full"
         :data="list"
         :height="height"
-        border
         style="width: 100%"
       >
         <!-- 配置项键 Column -->
@@ -45,7 +44,9 @@
         <!-- 是否启用 Column -->
         <el-table-column label="是否启用">
           <template v-slot="scope">
-            <span>{{ scope.row.is_active ? '是' : '否' }}</span>
+            <el-tag :type="scope.row.is_active ? 'success' : 'info'" disable-transitions>
+              {{ scope.row.is_active ? '是' : '否' }}
+            </el-tag>
           </template>
         </el-table-column>
 
@@ -70,13 +71,26 @@
           width="200px"
         >
           <template v-slot="scope">
-            <el-button type="text" size="small" @click="handleDetail(scope.row)"
+            <el-button
+              type="primary"
+              size="small"
+              plain
+              @click="handleDetail(scope.row)"
               >详情</el-button
             >
-            <el-button type="text" size="small" @click="handleEdit(scope.row)"
+            <el-button
+              type="success"
+              plain
+              size="small"
+              @click="handleEdit(scope.row)"
               >编辑</el-button
             >
-            <el-button type="text" size="small" @click="handleDelete(scope.row)"
+
+            <el-button
+              type="danger"
+              size="small"
+              plain
+              @click="handleDelete(scope.row)"
               >删除</el-button
             >
           </template>

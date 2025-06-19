@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'show': show }" class="header-search">
+  <div :class="{ 'show': show }" class="header-search inline-flex items-center">
     <svg-icon class-name="search-icon" icon-class="search" @click.stop="click" />
     <el-select ref="headerSearchSelect" v-model="search" :remote-method="querySearch" filterable default-first-option
       remote placeholder="Search" class="header-search-select" @change="change">

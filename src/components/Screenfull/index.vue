@@ -1,6 +1,9 @@
 <template>
-  <div>
-    <svg-icon :icon-class="isFullscreen ? 'exit-fullscreen' : 'fullscreen'" @click="click" />
+  <div class="inline-flex items-center">
+    <svg-icon
+      :icon-class="isFullscreen ? 'exit-fullscreen' : 'fullscreen'"
+      @click="click"
+    />
   </div>
 </template>
 
@@ -25,7 +28,12 @@ export default defineComponent({
   },
   methods: {
     click() {
-      console.log('screenfull.isEnabled=', screenfull.isEnabled, 'screenfull.isFullscreen=', screenfull.isFullscreen);
+      console.log(
+        'screenfull.isEnabled=',
+        screenfull.isEnabled,
+        'screenfull.isFullscreen=',
+        screenfull.isFullscreen
+      );
       if (!screenfull.isEnabled) {
         ElMessage({
           message: 'you browser can not work',
@@ -56,11 +64,10 @@ export default defineComponent({
 <style scoped>
 .screenfull-svg {
   display: inline-block;
-  cursor: pointer;
-  fill: #5a5e66;
-  ;
   width: 20px;
   height: 20px;
   vertical-align: 10px;
+  cursor: pointer;
+  fill: #5a5e66;
 }
 </style>

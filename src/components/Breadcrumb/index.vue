@@ -79,7 +79,8 @@ export default defineComponent({
   margin-left: 8px;
 
   .no-redirect {
-    color: #97a8be;
+    // color: #97a8be;
+    color: rgba(0, 0, 0, 0.88);
     cursor: text;
   }
 

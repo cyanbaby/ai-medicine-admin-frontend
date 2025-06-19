@@ -26,14 +26,33 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .app-main {
-  /* 50= navbar  50  */
-  min-height: calc(100vh - 50px);
-  width: 100%;
   position: relative;
+  width: 100%;
+  min-height: calc(100vh - 50px);
   overflow: hidden;
+  background-color: #f5f5f5;
 }
 
-.fixed-header+.app-main {
+::v-deep(.el-table th.el-table__cell) {
+  background-color: #f5f5f5;
+
+  .cell {
+    color: rgba(0, 0, 0, 0.88);
+    font-weight: 600;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
+      'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    transition: background 0.2s ease;
+  }
+}
+
+.app-container {
+  margin: 16px;
+  background-color: #fff;
+  border-radius: 6px;
+}
+
+.fixed-header + .app-main {
   padding-top: 50px;
 }
 
@@ -43,7 +62,7 @@ export default defineComponent({
     min-height: calc(100vh - 84px);
   }
 
-  .fixed-header+.app-main {
+  .fixed-header + .app-main {
     padding-top: 84px;
   }
 }

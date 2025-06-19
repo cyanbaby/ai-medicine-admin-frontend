@@ -1,7 +1,11 @@
 <template>
-  <div v-if="errorLogs.length>0">
-    <el-badge :is-dot="true" style="line-height: 25px;margin-top: -5px;" @click="dialogTableVisible=true">
-      <el-button style="padding: 8px 10px;" size="small" type="danger">
+  <div v-if="errorLogs.length > 0">
+    <el-badge
+      :is-dot="true"
+      style="line-height: 25px; margin-top: -5px"
+      @click="dialogTableVisible = true"
+    >
+      <el-button style="padding: 8px 10px" size="small" type="danger">
         <svg-icon icon-class="bug" />
       </el-button>
     </el-badge>
@@ -9,29 +13,37 @@
     <el-dialog v-model="dialogTableVisible" width="80%" append-to-body>
       <template v-slot:title>
         <div class="text-title">
-          <span style="padding-right: 10px;">Error Log</span>
-          <el-button size="small" type="primary" :icon="IconDelete" @click="clearAll">Clear All</el-button>
+          <span style="padding-right: 10px">Error Log</span>
+          <el-button
+            size="small"
+            type="primary"
+            :icon="IconDelete"
+            @click="clearAll"
+            >Clear All</el-button
+          >
         </div>
       </template>
       <el-table :data="errorLogs" border>
         <el-table-column label="Message">
-          <template v-slot="{row}">
+          <template v-slot="{ row }">
             <div>
               <span class="message-title">Msg:</span>
               <el-tag type="danger">
                 {{ row.err.message }}
               </el-tag>
             </div>
-            <br>
+            <br />
             <div>
-              <span class="message-title" style="padding-right: 10px;">Info: </span>
-              <el-tag type="warning">
-                error in {{ row.info }}
-              </el-tag>
+              <span class="message-title" style="padding-right: 10px"
+                >Info:
+              </span>
+              <el-tag type="warning"> error in {{ row.info }} </el-tag>
             </div>
-            <br>
+            <br />
             <div>
-              <span class="message-title" style="padding-right: 16px;">Url: </span>
+              <span class="message-title" style="padding-right: 16px"
+                >Url:
+              </span>
               <el-tag type="success">
                 {{ row.url }}
               </el-tag>
@@ -77,9 +89,9 @@ export default defineComponent({
 
 <style scoped>
 .message-title {
-  font-size: 16px;
+  padding-right: 8px;
   color: #333;
   font-weight: bold;
-  padding-right: 8px;
+  font-size: 16px;
 }
 </style>

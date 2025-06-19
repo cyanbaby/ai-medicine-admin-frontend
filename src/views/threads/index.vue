@@ -11,7 +11,6 @@
         class="w-full"
         :data="list"
         :height="height"
-        border
         style="width: 100%"
       >
         <!-- ID Column -->
@@ -87,25 +86,38 @@
           width="325px"
         >
           <template v-slot="scope">
-            <el-button type="text" size="small" @click="handleDetail(scope.row)"
+            <el-button
+              type="primary"
+              size="small"
+              plain
+              @click="handleDetail(scope.row)"
               >详情</el-button
             >
-            <el-button type="text" size="small" @click="handleEdit(scope.row)"
+            <el-button
+              type="success"
+              plain
+              size="small"
+              @click="handleEdit(scope.row)"
               >编辑</el-button
             >
-            <el-button type="text" size="small" @click="handleDelete(scope.row)"
+
+            <el-button
+              type="danger"
+              size="small"
+              plain
+              @click="handleDelete(scope.row)"
               >删除</el-button
             >
             <el-button
               v-if="scope.row.status !== 'archived'"
-              type="text"
+              type="success"
               size="small"
               @click="handleArchive(scope.row)"
               >归档</el-button
             >
             <el-button
               v-if="scope.row.status === 'archived'"
-              type="text"
+              type="success"
               size="small"
               @click="handleRestore(scope.row)"
               >恢复</el-button

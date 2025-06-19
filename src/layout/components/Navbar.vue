@@ -10,7 +10,7 @@
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
     <div class="right-menu">
-      <!-- <template v-if="device !== 'mobile'">
+      <template v-if="device !== 'mobile'">
         <search id="header-search" class="right-menu-item" />
 
         <error-log class="errLog-container right-menu-item hover-effect" />
@@ -20,19 +20,26 @@
         <el-tooltip content="全局组件尺寸" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
-
-      </template> -->
+      </template>
 
       <el-dropdown
         class="avatar-container right-menu-item hover-effect"
         trigger="click"
       >
-        <div class="avatar-wrapper">
-          <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar" />
-          <el-icon class="el-icon-caret-bottom" size="small">
-            <CaretBottom />
-          </el-icon>
+        <div class="inline-flex items-center">
+          <div class="avatar-wrapper">
+            <img
+              :src="avatar + '?imageView2/1/w/80/h/80'"
+              class="user-avatar"
+            />
+
+            <!-- <el-icon class="el-icon-caret-bottom" size="small">
+              <CaretBottom />
+            </el-icon> -->
+          </div>
+          <span class="ml-2 cursor-pointer" style="color: rgba(0, 0, 0, 0.45); font-size: 14px">cucurbitbaby@163.com</span>
         </div>
+
         <template #dropdown>
           <el-dropdown-menu>
             <router-link to="/profile/index">
@@ -132,10 +139,10 @@ export default defineComponent({
     .right-menu-item {
       display: inline-block;
       height: 100%;
-      padding: 0 8px;
+      padding: 0 16px;
       color: #5a5e66;
       font-size: 18px;
-      line-height: 50px;
+      // line-height: 50px;
       vertical-align: text-bottom;
 
       &.hover-effect {

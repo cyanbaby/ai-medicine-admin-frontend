@@ -21,7 +21,7 @@ const settings:ISettings = {
    * @type {boolean} true | false
    * @description Whether need tagsView
    */
-  tagsView: false,
+  tagsView: true,
 
   /**
    * @type {boolean} true | false

@@ -11,7 +11,6 @@
         class="w-full"
         :data="list"
         :height="height"
-        border
         style="width: 100%"
       >
         <el-table-column prop="id" label="ID" width="80" />
@@ -22,9 +21,8 @@
           prop="execution_count"
           label="执行次数"
           width="100"
-          align="center"
         />
-        <el-table-column prop="status" label="状态" width="100" align="center">
+        <el-table-column prop="status" label="状态" width="100" >
           <template #default="scope">
             <el-tag
               :type="
@@ -70,13 +68,11 @@
           prop="instance_count"
           label="实例数量"
           width="100"
-          align="center"
         />
         <el-table-column
           prop="is_template"
           label="是否模板"
           width="100"
-          align="center"
         >
           <template #default="scope">
             <el-tag :type="scope.row.is_template ? 'success' : 'info'">
@@ -87,21 +83,37 @@
 
         <!-- Actions Column -->
         <el-table-column
-          align="center"
           fixed="right"
           label="操作"
           width="325px"
         >
           <template v-slot="scope">
-            <el-button type="text" size="small" @click="handleDetail(scope.row)"
+            <el-button
+              type="primary"
+              size="small"
+              plain
+              @click="handleDetail(scope.row)"
               >详情</el-button
+            >
+            <!-- <el-button
+              type="success"
+              plain
+              size="small"
+              @click="handleEdit(scope.row)"
+              >编辑</el-button
+            > -->
+
+            <el-button
+              type="danger"
+              size="small"
+              plain
+              @click="handleDelete(scope.row)"
+              >删除</el-button
             >
             <!-- <el-button type="text" size="small" @click="handleEdit(scope.row)"
               >编辑</el-button
             > -->
-            <el-button type="text" size="small" @click="handleDelete(scope.row)"
-              >删除</el-button
-            >
+
             <!-- <el-button
               v-if="scope.row.status !== 'archived'"
               type="text"
