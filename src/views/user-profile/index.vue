@@ -1,9 +1,80 @@
 <template>
   <div class="app-container absolute inset-0 flex flex-col">
-    <!-- <div class="app-header mb-4 flex-shrink-0">
-      <el-input v-model="search" placeholder="搜索" style="width: 220px" />
-      <el-button type="primary" class="ml-4">搜索</el-button>
-    </div> -->
+    <div
+      class="app-header mb-4 flex-shrink-0 flex items-center flex-wrap gap-4"
+    >
+      <el-input
+        v-model="searchForm.username"
+        placeholder="用户名"
+        clearable
+        class="search-ctrl"
+      />
+      <el-input
+        v-model="searchForm.email"
+        placeholder="邮箱"
+        clearable
+        class="search-ctrl"
+      />
+      <el-select
+        v-model="searchForm.is_staff"
+        placeholder="是否为工作人员"
+        clearable
+        class="search-ctrl"
+      >
+        <el-option label="是" :value="true" />
+        <el-option label="否" :value="false" />
+      </el-select>
+      <el-select
+        v-model="searchForm.is_superuser"
+        placeholder="是否为超级管理员"
+        clearable
+        class="search-ctrl"
+      >
+        <el-option label="是" :value="true" />
+        <el-option label="否" :value="false" />
+      </el-select>
+      <el-select
+        v-model="searchForm.is_email_verified"
+        placeholder="邮箱是否验证"
+        clearable
+        class="search-ctrl"
+      >
+        <el-option label="是" :value="true" />
+        <el-option label="否" :value="false" />
+      </el-select>
+      <el-select
+        v-model="searchForm.user_tier"
+        placeholder="用户等级"
+        clearable
+        class="search-ctrl"
+      >
+        <el-option label="basic" value="basic" />
+        <el-option label="premium" value="premium" />
+        <el-option label="enterprise" value="enterprise" />
+      </el-select>
+      <el-select
+        v-model="searchForm.is_premium"
+        placeholder="是否高级用户"
+        clearable
+        class="search-ctrl"
+      >
+        <el-option label="是" :value="true" />
+        <el-option label="否" :value="false" />
+      </el-select>
+      <el-select
+        v-model="searchForm.is_enterprise"
+        placeholder="是否企业用户"
+        clearable
+        class="search-ctrl"
+      >
+        <el-option label="是" :value="true" />
+        <el-option label="否" :value="false" />
+      </el-select>
+
+      <el-button type="primary" @click="getList">搜索</el-button>
+      <el-button type="info" class="ml-0" plain @click="resetSearch">重置</el-button>
+    </div>
+
     <div :class="`app-body flex-1 overflow-hidden ${tableWrapOnlyClass}`">
       <el-table
         v-loading="listLoading"
@@ -286,6 +357,17 @@ import { defineComponent } from 'vue';
 import Pagination from '@/components/Pagination'; // Secondary package based on el-pagination
 import { formatDateTime } from '@/utils';
 
+const searchForm = {
+  username: '', // 用户名
+  email: '', // 邮箱
+  is_staff: '', // 是否为工作人员
+  is_superuser: '', // 是否为超级管理员
+  is_email_verified: '', // 邮箱是否已验证
+  user_tier: '', // 用户等级
+  is_premium: '', // 是否为高级用户
+  is_enterprise: '' // 是否为企业用户
+};
+
 export default defineComponent({
   name: 'UserProfile',
   components: { Pagination },
@@ -305,6 +387,7 @@ export default defineComponent({
       dialogVisible: false, // 控制弹窗显示
       currentUser: null as any, // 当前选中用户详情
       editDialogVisible: false,
+      searchForm,
       editForm: {
         email: '',
         first_name: '',
@@ -364,7 +447,8 @@ export default defineComponent({
     getList() {
       getList({
         page: this.listQuery.page,
-        pageSize: this.listQuery.limit
+        pageSize: this.listQuery.limit,
+        ...this.searchForm
       })
         .then((res) => {
           const data = res.data;
@@ -376,6 +460,13 @@ export default defineComponent({
         .finally(() => {
           this.listLoading = false;
         });
+    },
+    resetSearch() {
+      this.searchForm = {
+        ...searchForm
+      };
+      this.listQuery.page = 1;
+      this.getList();
     },
     formatDateTime,
     statusFilter(status) {

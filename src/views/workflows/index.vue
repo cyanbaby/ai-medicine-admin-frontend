@@ -5,6 +5,58 @@
         <el-button type="primary" @click="handleAdd">添加工作流</el-button>
       </div>
     </div> -->
+
+    <div
+      class="app-header mb-4 flex-shrink-0 flex items-center flex-wrap gap-4"
+    >
+      <el-input
+        v-model="searchForm.name"
+        placeholder="工作流名称"
+        clearable
+        class="search-ctrl"
+      />
+      <el-input
+        v-model="searchForm.creator_name"
+        placeholder="创建者"
+        clearable
+        class="search-ctrl"
+      />
+      <el-select
+        v-model="searchForm.status"
+        placeholder="状态"
+        clearable
+        class="search-ctrl"
+      >
+        <el-option label="草稿" value="draft" />
+        <el-option label="活跃" value="active" />
+        <el-option label="已归档" value="archived" />
+        <el-option label="已删除" value="deleted" />
+      </el-select>
+      <el-select
+        v-model="searchForm.is_template"
+        placeholder="是否为模板"
+        clearable
+        class="search-ctrl"
+      >
+        <el-option label="是" :value="true" />
+        <el-option label="否" :value="false" />
+      </el-select>
+      <div style="width: 220px">
+        <el-date-picker
+          v-model="searchForm.created_time_range"
+          type="daterange"
+          value-format="YYYY-MM-DD"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          class="search-ctrl"
+        />
+      </div>
+      <el-button type="primary" @click="getList">搜索</el-button>
+      <el-button type="info" class="ml-0" plain @click="resetSearch"
+        >重置</el-button
+      >
+    </div>
+
     <div :class="`app-body flex-1 overflow-hidden ${tableWrapOnlyClass}`">
       <el-table
         v-loading="listLoading"
@@ -319,11 +371,20 @@ import {
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { API_BASE_URL } from '@/utils/constant';
 
+const searchForm = {
+  name: '', // 工作流名称
+  creator_name: '', // 创建者
+  status: '', // 状态
+  is_template: '', // 是否模板
+  created_time_range: [] // 创建时间范围
+};
+
 export default defineComponent({
   name: 'UserProfile',
   components: { Pagination },
   data() {
     return {
+      searchForm,
       API_BASE_URL,
       tableWrapOnlyClass: 'nona-class-' + nanoid(),
       height: '',
@@ -342,6 +403,18 @@ export default defineComponent({
       editDialogVisible: false,
       editForm: {} as any,
       addDialogVisible: false,
+      searchFormOptions: {
+        status: [
+          { label: '草稿', value: 'draft' },
+          { label: '活跃', value: 'active' },
+          { label: '已归档', value: 'archived' },
+          { label: '已删除', value: 'deleted' }
+        ],
+        isTemplate: [
+          { label: '是', value: true },
+          { label: '否', value: false }
+        ]
+      },
       addForm: {
         name: '',
         display_name: '',
@@ -388,6 +461,14 @@ export default defineComponent({
     this.observerTableParent();
   },
   methods: {
+    resetSearch() {
+      this.searchForm = {
+        ...searchForm
+      };
+      this.searchForm.created_time_range = [];
+      this.listQuery.page = 1;
+      this.getList();
+    },
     // 监听表格父节点变化
     observerTableParent() {
       const targetNode = document.querySelector(`.${this.tableWrapOnlyClass}`);
@@ -429,7 +510,8 @@ export default defineComponent({
     getList() {
       getWorkflowsList({
         page: this.listQuery.page,
-        pageSize: this.listQuery.limit
+        pageSize: this.listQuery.limit,
+        ...searchForm
       })
         .then((res) => {
           const data = res.data;

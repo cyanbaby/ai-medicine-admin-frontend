@@ -1,10 +1,63 @@
 <template>
   <div class="app-container absolute inset-0 flex flex-col">
-    <div class="app-header mb-4 flex-shrink-0 flex">
+    <div
+      class="app-header mb-4 flex-shrink-0 flex items-center flex-wrap gap-4"
+    >
+      <el-input
+        v-model="searchForm.title"
+        placeholder="对话标题"
+        clearable
+        class="search-ctrl"
+      />
+      <el-input
+        v-model="searchForm.user_name"
+        placeholder="用户名"
+        clearable
+        class="search-ctrl"
+      />
+      <el-select
+        v-model="searchForm.status"
+        placeholder="状态"
+        clearable
+        class="search-ctrl"
+      >
+        <el-option label="活跃" value="active" />
+        <el-option label="已归档" value="archived" />
+      </el-select>
+      <el-select
+        v-model="searchForm.llm"
+        placeholder="所属模型"
+        clearable
+        filterable
+        class="search-ctrl"
+      >
+        <el-option
+          v-for="model in modelOptions"
+          :key="model.id"
+          :label="model.display_name"
+          :value="model.id"
+        />
+      </el-select>
+      <div style="width: 220px">
+        <el-date-picker
+          v-model="searchForm.date_range"
+          type="daterange"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
+          class="search-ctrl"
+        />
+      </div>
+
+      <el-button type="primary" @click="getList">搜索</el-button>
+      <el-button type="info" class="ml-0" plain @click="resetSearch"
+        >重置</el-button
+      >
+
       <div class="inline-flex ml-auto">
         <el-button type="primary" @click="handleAdd">添加对话线程</el-button>
       </div>
     </div>
+
     <div :class="`app-body flex-1 overflow-hidden ${tableWrapOnlyClass}`">
       <el-table
         v-loading="listLoading"
@@ -322,11 +375,20 @@ import {
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { API_BASE_URL } from '@/utils/constant';
 
+const searchForm = {
+  title: '',
+  user_name: '',
+  status: '',
+  llm: '',
+  date_range: []
+};
+
 export default defineComponent({
   name: 'UserProfile',
   components: { Pagination },
   data() {
     return {
+      searchForm,
       API_BASE_URL,
       tableWrapOnlyClass: 'nona-class-' + nanoid(),
       height: '',
@@ -391,6 +453,14 @@ export default defineComponent({
     this.observerTableParent();
   },
   methods: {
+    resetSearch() {
+      this.searchForm = {
+        ...searchForm
+      };
+      this.searchForm.date_range = [];
+      this.listQuery.page = 1;
+      this.getList();
+    },
     // 监听表格父节点变化
     observerTableParent() {
       const targetNode = document.querySelector(`.${this.tableWrapOnlyClass}`);
@@ -423,7 +493,8 @@ export default defineComponent({
     getModels() {
       getModelsList({
         page: 1,
-        pageSize: 1000
+        pageSize: 1000,
+        ...searchForm
       }).then((res) => {
         const data = res.data;
         this.modelOptions = data.results;
@@ -432,7 +503,8 @@ export default defineComponent({
     getList() {
       getList({
         page: this.listQuery.page,
-        pageSize: this.listQuery.limit
+        pageSize: this.listQuery.limit,
+        ...searchForm
       })
         .then((res) => {
           const data = res.data;

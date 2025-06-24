@@ -1,10 +1,68 @@
 <template>
   <div class="app-container absolute inset-0 flex flex-col">
-    <div class="app-header mb-4 flex-shrink-0 flex">
+    <!-- <div class="app-header mb-4 flex-shrink-0 flex">
+      <div class="inline-flex ml-auto">
+        <el-button type="primary" @click="handleAdd">添加配置</el-button>
+      </div>
+    </div> -->
+
+    <div
+      class="app-header mb-4 flex-shrink-0 flex items-center flex-wrap gap-4"
+    >
+      <el-input
+        v-model="searchForm.name"
+        placeholder="模型名称"
+        clearable
+        class="search-ctrl"
+      />
+      <el-input
+        v-model="searchForm.display_name"
+        placeholder="显示名称"
+        clearable
+        class="search-ctrl"
+      />
+      <el-input
+        v-model="searchForm.provider"
+        placeholder="提供商"
+        clearable
+        class="search-ctrl"
+      />
+      <el-select
+        v-model="searchForm.is_enabled"
+        placeholder="启用状态"
+        clearable
+        class="search-ctrl"
+      >
+        <el-option label="启用" :value="true" />
+        <el-option label="禁用" :value="false" />
+      </el-select>
+      <el-select
+        v-model="searchForm.is_premium"
+        placeholder="付费状态"
+        clearable
+        class="search-ctrl"
+      >
+        <el-option label="付费" :value="true" />
+        <el-option label="免费" :value="false" />
+      </el-select>
+      <div style="width: 220px">
+        <el-date-picker
+          v-model="searchForm.date_range"
+          type="daterange"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
+          class="search-ctrl"
+        />
+      </div>
+      <el-button type="primary" @click="getList">搜索</el-button>
+      <el-button type="info" class="ml-0" plain @click="resetSearch"
+        >重置</el-button
+      >
       <div class="inline-flex ml-auto">
         <el-button type="primary" @click="handleAdd">添加配置</el-button>
       </div>
     </div>
+
     <div :class="`app-body flex-1 overflow-hidden ${tableWrapOnlyClass}`">
       <el-table
         v-loading="listLoading"
@@ -311,13 +369,23 @@ import {
   deleteModel as deleteItem
 } from '@/api/full-models';
 
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessageBox } from 'element-plus';
+
+const searchForm = {
+  name: '',
+  display_name: '',
+  provider: '',
+  is_enabled: '',
+  is_premium: '',
+  date_range: []
+};
 
 export default defineComponent({
   name: 'UserProfile',
   components: { Pagination },
   data() {
     return {
+      searchForm,
       tableWrapOnlyClass: 'nona-class-' + nanoid(),
       height: '',
       debouncedSetHeight: null as any,
@@ -379,6 +447,14 @@ export default defineComponent({
     this.observerTableParent();
   },
   methods: {
+    resetSearch() {
+      this.searchForm = {
+        ...searchForm
+      };
+      this.searchForm.date_range = [];
+      this.listQuery.page = 1;
+      this.getList();
+    },
     // 监听表格父节点变化
     observerTableParent() {
       const targetNode = document.querySelector(`.${this.tableWrapOnlyClass}`);
@@ -411,7 +487,8 @@ export default defineComponent({
     getList() {
       getList({
         page: this.listQuery.page,
-        pageSize: this.listQuery.limit
+        pageSize: this.listQuery.limit,
+        ...searchForm
       })
         .then((res) => {
           const data = res.data;

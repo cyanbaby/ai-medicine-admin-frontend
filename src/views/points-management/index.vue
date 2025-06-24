@@ -1,6 +1,46 @@
 <template>
   <div class="app-container absolute inset-0 flex flex-col">
-    <div class="app-header mb-4 flex-shrink-0 flex">
+    <div
+      class="app-header mb-4 flex-shrink-0 flex items-center flex-wrap gap-4"
+    >
+      <el-input
+        v-model="searchForm.username"
+        placeholder="用户名"
+        clearable
+        class="search-ctrl"
+      />
+      <el-input
+        v-model="searchForm.email"
+        placeholder="邮箱"
+        clearable
+        class="search-ctrl"
+      />
+      <el-select
+        v-model="searchForm.reason"
+        placeholder="积分原因"
+        clearable
+        class="search-ctrl"
+      >
+        <el-option
+          v-for="option in reasonOptions"
+          :key="option.value"
+          :label="option.label"
+          :value="option.value"
+        />
+      </el-select>
+      <div style="width: 350px">
+        <el-date-picker
+          v-model="searchForm.date_range"
+          type="daterange"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        />
+      </div>
+
+      <el-button type="primary" @click="getList">搜索</el-button>
+      <el-button type="info" class="ml-0" plain @click="resetSearch"
+        >重置</el-button
+      >
       <div class="inline-flex ml-auto">
         <el-button type="primary" @click="handleAdd">添加积分记录</el-button>
         <el-button type="primary" @click="handleAdjustPoints"
@@ -279,13 +319,21 @@ import {
   deletePoint as deleteItem,
   adjustPoints
 } from '@/api/points';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessageBox } from 'element-plus';
+
+const searchForm = {
+  username: '',
+  email: '',
+  reason: '',
+  date_range: [] // [startDate, endDate]
+};
 
 export default defineComponent({
   name: 'UserProfile',
   components: { Pagination },
   data() {
     return {
+      searchForm,
       tableWrapOnlyClass: 'nona-class-' + nanoid(),
       height: '',
       debouncedSetHeight: null as any,
@@ -347,6 +395,14 @@ export default defineComponent({
     this.observerTableParent();
   },
   methods: {
+    resetSearch() {
+      this.searchForm = {
+        ...searchForm
+      };
+      this.searchForm.date_range = [];
+      this.listQuery.page = 1;
+      this.getList();
+    },
     // 监听表格父节点变化
     observerTableParent() {
       const targetNode = document.querySelector(`.${this.tableWrapOnlyClass}`);
@@ -379,7 +435,8 @@ export default defineComponent({
     getList() {
       getList({
         page: this.listQuery.page,
-        pageSize: this.listQuery.limit
+        pageSize: this.listQuery.limit,
+        ...this.searchForm
       })
         .then((res) => {
           const data = res.data;

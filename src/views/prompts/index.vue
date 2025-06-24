@@ -1,10 +1,50 @@
 <template>
   <div class="app-container absolute inset-0 flex flex-col">
-    <div class="app-header mb-4 flex-shrink-0 flex">
+    <!-- <div class="app-header mb-4 flex-shrink-0 flex">
       <div class="inline-flex ml-auto">
         <el-button type="primary" @click="handleAdd">添加提示词</el-button>
       </div>
+    </div> -->
+
+    <div
+      class="app-header mb-4 flex-shrink-0 flex items-center flex-wrap gap-4"
+    >
+      <el-input
+        v-model="searchForm.title"
+        placeholder="标题"
+        class="search-ctrl mr-2"
+        clearable
+      />
+      <el-input
+        v-model="searchForm.tags"
+        placeholder="标签"
+        class="search-ctrl mr-2"
+        clearable
+      />
+      <el-input
+        v-model="searchForm.directory"
+        placeholder="目录"
+        class="search-ctrl mr-2"
+        clearable
+      />
+      <div style="width: 220px">
+        <el-date-picker
+          v-model="searchForm.created_time_range"
+          type="daterange"
+          value-format="YYYY-MM-DD"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          class="search-ctrl mr-2"
+        />
+      </div>
+
+      <el-button type="primary" @click="getList">搜索</el-button>
+      <el-button type="info" class="ml-0" plain @click="resetSearch"
+        >重置</el-button
+      >
     </div>
+
     <div :class="`app-body flex-1 overflow-hidden ${tableWrapOnlyClass}`">
       <el-table
         v-loading="listLoading"
@@ -219,11 +259,19 @@ import {
 
 import { ElMessage, ElMessageBox } from 'element-plus';
 
+const searchForm = {
+  title: '',
+  tags: '',
+  directory: '',
+  created_time_range: [] // [起始时间, 结束时间]
+};
+
 export default defineComponent({
   name: 'UserProfile',
   components: { Pagination },
   data() {
     return {
+      searchForm,
       tableWrapOnlyClass: 'nona-class-' + nanoid(),
       height: '',
       debouncedSetHeight: null as any,
@@ -274,6 +322,14 @@ export default defineComponent({
     this.observerTableParent();
   },
   methods: {
+    resetSearch() {
+      this.searchForm = {
+        ...searchForm
+      };
+      this.searchForm.created_time_range = [];
+      this.listQuery.page = 1;
+      this.getList();
+    },
     // 监听表格父节点变化
     observerTableParent() {
       const targetNode = document.querySelector(`.${this.tableWrapOnlyClass}`);
